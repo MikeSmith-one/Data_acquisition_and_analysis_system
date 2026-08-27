@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConfigPageClass</class>
+ <widget class="QWidget" name="ConfigPageClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1071</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QWidget" name="toolBar" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;当前工位配置：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="presentStation">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="loadingConfigBtn">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>加载配置</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveConfigBtn">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>保存配置</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="resumeConfigBtn">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>恢复默认配置</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>233</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>配置状态: 已加载 (d:/config/dev_config.ini)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,3">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="telemessageBox">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="title">
+         <string>通信设置（工位1）</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>状态：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Protocol：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QSpinBox" name="modbusPort">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QComboBox" name="protocalBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>Modbus TCP</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Modbus RTU</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>IP 地址：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" colspan="2">
+          <widget class="QLineEdit" name="ipAddresslineEdit">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QSpinBox" name="slaveStationID">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="3">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>轮询周期：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="3">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>从站ID：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
+          <widget class="QSpinBox" name="period">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="3">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Modbus 端口：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="5" column="1" colspan="3">
+          <widget class="QLabel" name="connectStation">
+           <property name="text">
+            <string>🟢 Connected(工位1)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="4">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QGroupBox" name="dataMappingBox">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="title">
+         <string>数据点表映射（工位1）</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QTabWidget" name="tabWidget"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="warningBox">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="title">
+         <string>报警阈值（工位1）</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="spinBox_7">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="spinBox_4">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="spinBox_5">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QSpinBox" name="spinBox_8">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="lineEdit_2"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="spinBox_6">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QGroupBox" name="storage_logBox">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="title">
+         <string>数据存储与日志（全局）</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="1" colspan="2">
+          <widget class="QComboBox" name="comboBox_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>1s</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>5s</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>10s</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>30s</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>60s</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>存储位置：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="2">
+          <widget class="QLineEdit" name="lineEdit_3"/>
+         </item>
+         <item row="2" column="1" colspan="2">
+          <widget class="QCheckBox" name="checkBox">
+           <property name="text">
+            <string>开启自动清理</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>数据保存周期：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="spinBox_9">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>自动清理日志：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_20">
+           <property name="text">
+            <string>天</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_19">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>日志保留天数：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QToolButton" name="toolButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

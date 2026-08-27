@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LogPageClass</class>
+ <widget class="QWidget" name="LogPageClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1065</width>
+    <height>728</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QWidget" name="filterBar" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="toolBarLabel">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-weight:700;&quot;&gt;日志筛选&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8" rowspan="2">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="queryBtn">
+          <property name="text">
+           <string>[查询]</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="resetBtn">
+          <property name="text">
+           <string>[重置]</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="exportLogBtn">
+          <property name="text">
+           <string>导出日志</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="cleanShowBtn">
+          <property name="text">
+           <string>清空显示</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>起始时间</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QLineEdit" name="keySearchLineEdit"/>
+      </item>
+      <item row="0" column="2" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QDoubleSpinBox" name="startTimeSpinBox"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>10</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>10</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font/>
+          </property>
+          <property name="text">
+           <string>~</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="endTimeSpinBox"/>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="5">
+       <widget class="QComboBox" name="logLevelBox">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>全部（All）</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>正常（INFO）</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>警告（WARN）</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>错误（ERROR）</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font/>
+        </property>
+        <property name="text">
+         <string>结束时间</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_4">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>日志级别</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QLabel" name="label_3">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>关键字搜索</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Policy::MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QWidget" name="widget_2" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QGroupBox" name="logCountsBox">
+          <property name="title">
+           <string>日志级别统计</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>🔴 ERROR: 0 次,</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>🟡 WARN: 0 次</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>🔵 INFO: 0 次</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;来源模块筛选&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="listWidget"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="widget_3" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTabWidget" name="logShowList"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;日志详情预览&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTabWidget" name="logInfoList">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>150</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QFrame" name="statusBar">
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>日志文件路径：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>940</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
