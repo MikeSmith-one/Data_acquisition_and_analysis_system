@@ -7,6 +7,8 @@ include(qt.cmake)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_AUTORCC ON)#从资源路径加载qss必须加上这条
+
 # 1. 引入 Qt 所需组件（增加了 Network、Sql、Charts）
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR}
@@ -25,6 +27,9 @@ qt_standard_project_setup()
 set(PROJECT_SOURCES
     main.cpp
     Data_acquisition_and_analysis_system.rc
+
+    #全局配置单例
+    ui/pages/ConfigManager.h
 
     #主窗口
     ui/MainWindow.h
@@ -53,6 +58,9 @@ set(PROJECT_SOURCES
     network/ModbusClient.cpp
     database/DatabaseManager.h
     database/DatabaseManager.cpp
+
+    #资源文件
+    Resource.qrc
 )
 
 qt_add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
@@ -68,7 +76,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
-        WIN32_EXECUTABLE TRUE
+        WIN32_EXECUTABLE FALSE
 )
 
 target_link_libraries(${PROJECT_NAME}

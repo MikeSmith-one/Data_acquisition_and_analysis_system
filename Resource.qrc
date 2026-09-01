@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resource/uiData/analysisExtractionModes.json</file>
+        <file>Resource/uiData/listView1Data.json</file>
+        <file>Resource/uiData/listView2Data.json</file>
+        <file>Resource/uiData/tableWidget1Data.json</file>
+        <file>Resource/uiData/tableWidget2Data.json</file>
+        <file>Resource/qss/AcquisitionPage.css</file>
+        <file>Resource/qss/AnalysisPage.css</file>
+        <file>Resource/qss/ConfigPage.css</file>
+        <file>Resource/qss/LogPage.css</file>
+        <file>Resource/qss/MainWindow.css</file>
+        <file>Resource/uiData/acquisitionExtractionModes.json</file>
+        <file>Resource/uiData/configTableWidget1.json</file>
+        <file>Resource/uiData/configTableWidget3.json</file>
+        <file>Resource/uiData/configTableWidget2.json</file>
+    </qresource>
+</RCC>

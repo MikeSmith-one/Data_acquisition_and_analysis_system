@@ -1,0 +1,16 @@
+#filterBar {
+    background-color: steelblue;
+}
+
+#queryBtn {
+    background-color: #0a3f6b;
+    color: white;
+    font-weight: bold
+}
+
+    #queryBtn:hover {
+        background-color: #8bbbe3;
+    }
+    #queryBtn:pressed {
+        background-color: #0f4878;
+    }

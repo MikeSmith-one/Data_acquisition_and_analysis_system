@@ -1,11 +1,30 @@
 #include "ConfigPage.h"
-#include <QChart>
+#include "ConfigManager.h"
 
 ConfigPage::ConfigPage(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::ConfigPageClass())
 {
     ui->setupUi(this);
+
+    initUI();
+
+	//初始化1个工位，防止 UI 出现空载状态
+    updateStationCount(1);
+
+    // 1. 初始化路径
+    m_iniPath = QCoreApplication::applicationDirPath() + "/config/dev_config.ini";
+
+    // 2. 初始化UI结构
+    initTableWidget(ui->tableWidget, ":/Resource/uiData/configTableWidget1.json", m_colsDataMapping);
+    initTableWidget(ui->tableWidget_2, ":/Resource/uiData/configTableWidget2.json", m_colsCommConfig);
+    initTableWidget(ui->tableWidget_3, ":/Resource/uiData/configTableWidget3.json", m_colsAlarmLimit);
+
+    // 3. 假设加载工位1 (Index 0)
+    //QString stName = "Station_1";
+    //loadTableFromIni(ui->tableWidget, m_colsDataMapping, stName + "_DataMapping");
+    //loadTableFromIni(ui->tableWidget_2, m_colsCommConfig, stName + "_Comm");
+    //loadTableFromIni(ui->tableWidget_3, m_colsAlarmLimit, stName + "_Alarm");
 }
 
 ConfigPage::~ConfigPage()
@@ -13,3 +32,271 @@ ConfigPage::~ConfigPage()
     delete ui;
 }
 
+void ConfigPage::initUI()
+{
+    QString qss = loadQss();
+    this->setStyleSheet(qss);
+
+    // 1. 设置默认路径并显示在顶部 LineEdit
+    QString defaultPath = QCoreApplication::applicationDirPath() + "/config/dev_config.ini";
+    ConfigManager::instance()->setIniPath(defaultPath);
+    ui->iniPath->setText(defaultPath);
+
+    // 2. 通过 JSON 绘制三个表格的 UI 骨架 (复用之前的 initTableWidget 逻辑)
+    initTableWidget(ui->tableWidget, ":/Resource/uiData/configTableWidget1.json", m_colsDataMapping);
+    initTableWidget(ui->tableWidget_2, ":/Resource/uiData/configTableWidget2.json", m_colsCommConfig);
+    initTableWidget(ui->tableWidget_3, ":/Resource/uiData/configTableWidget3.json", m_colsAlarmLimit);
+
+    // 3. 从 INI 读取全局工位数量并同步 UI
+    int count = ConfigManager::instance()->getStationCount();
+    ui->stationNum->setValue(count);
+    updateStationCount(count); // 刷新 presentStation 下拉框
+
+    // 4. 默认加载工位 1 的数据
+    loadStationData(0);
+}
+
+QString ConfigPage::loadQss()
+{
+    QFile file(":/Resource/qss/ConfigPage.css");
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "打开文件失败!";
+        return "";
+    }
+
+    return file.readAll();
+}
+
+//槽函数：更新工位数量下拉框
+void ConfigPage::updateStationCount(int count)
+{
+    if (count <= 0) return;
+
+    //刷新当前配置下拉框
+    ui->presentStation->blockSignals(true); //隔离信号，防止清理重建时越界
+    ui->presentStation->clear();
+    for (int i = 1; i <= count; ++i) {
+        ui->presentStation->addItem(QString("工位 %1").arg(i), i - 1);
+    }
+    ui->presentStation->blockSignals(false);
+}
+
+//槽函数：切换工位 (下拉框切换)
+void ConfigPage::on_presentStation_currentIndexChanged(int index)
+{
+    if (index < 0) return;
+
+    // 更新 GroupBox 标题
+    QString titleSuffix = QString("(工位%1)").arg(index + 1);
+    ui->telemessageBox->setTitle("通信设置 " + titleSuffix);
+    ui->dataMappingBox->setTitle("数据点表映射 " + titleSuffix);
+    ui->warningBox->setTitle("报警阈值 " + titleSuffix);
+
+    // 从 INI 中加载新工位的数据并覆写到表格中
+    loadStationData(index);
+}
+
+//槽函数：保存当前工位配置 (局部保存)
+void ConfigPage::on_savePresentConfigBtn_clicked()
+{
+    int index = ui->presentStation->currentIndex();
+    QString stationPrefix = QString("Station_%1").arg(index + 1);
+
+    //调用之前写的通用保存函数
+    saveTableToIni(ui->tableWidget, m_colsDataMapping, stationPrefix + "_DataMapping");
+    saveTableToIni(ui->tableWidget_2, m_colsCommConfig, stationPrefix + "_Comm");
+    saveTableToIni(ui->tableWidget_3, m_colsAlarmLimit, stationPrefix + "_Alarm");
+
+    //弹窗提示
+    QMessageBox::information(this, "提示", QString("工位 %1 配置已保存！").arg(index + 1));
+
+    //通知后台，当前工位配置已变
+    emit ConfigManager::instance()->configUpdated(ui->stationNum->value());
+}
+
+//槽函数：保存全局配置 (全局保存)
+void ConfigPage::on_globalSaveBtn_clicked()
+{
+    int newCount = ui->stationNum->value();
+    QString path = ConfigManager::instance()->getIniPath();
+    QSettings settings(path, QSettings::IniFormat);
+
+    //写入全局变量
+    settings.setValue("Global/StationCount", newCount);
+    settings.setValue("Global/SavePeriod", ui->dataSavePeriod->currentText());
+    settings.setValue("Global/SaveLocation", ui->saveLocation->text());
+    settings.setValue("Global/AutoClean", ui->switchAutoClean->isChecked());
+    settings.setValue("Global/LogRetainDays", ui->saveDates->value());
+    settings.sync();
+
+    //刷新下拉框
+    updateStationCount(newCount);
+
+    QMessageBox::information(this, "提示", "全局配置已保存！");
+
+    //广播全局信号，采集页面收到后重构界面列数
+    emit ConfigManager::instance()->configUpdated(newCount);
+}
+
+//槽函数：选择新的配置文件 (顶栏 ToolButton)
+void ConfigPage::on_toolButton_2_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "选择配置文件", "", "Config Files (*.ini)");
+    if (!fileName.isEmpty()) {
+        ui->iniPath->setText(fileName);
+        ConfigManager::instance()->setIniPath(fileName);
+
+        // 重新读取并刷新整个界面
+        int count = ConfigManager::instance()->getStationCount();
+        ui->stationNum->setValue(count);
+        updateStationCount(count);
+        loadStationData(0);
+    }
+}
+
+void ConfigPage::initTableWidget(QTableWidget* table, const QString& jsonPath, QJsonArray& colCache)
+{
+    QFile file(jsonPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) { 
+        qWarning() << "打开文件失败!";
+        return; }
+
+    QJsonObject root = QJsonDocument::fromJson(file.readAll()).object();
+    file.close();
+
+    colCache = root["columns"].toArray();
+    QJsonArray rowDatas = root["default_data"].toArray();
+
+	//清空表格并设置行列数
+    table->clear();
+    table->setColumnCount(colCache.size());
+    table->setRowCount(rowDatas.size());
+
+	//设置表格自适应列宽
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+	//设置表头文字
+    QStringList headers;
+    for (const auto& colVal : colCache) headers.append(colVal.toObject()["title"].toString());
+    table->setHorizontalHeaderLabels(headers);
+
+    for (int row = 0; row < rowDatas.size(); ++row) {
+        QJsonObject rowObj = rowDatas[row].toObject();
+
+        for (int col = 0; col < colCache.size(); ++col) {
+            QJsonObject config = colCache[col].toObject();
+            QString type = config["type"].toString();
+			QString key = config["key"].toString();//用于从 rowObj 中获取对应的值，加载默认数据的关键
+
+            //若类型为行相关(如通信设置)，则从该行的 widget_def 提取具体配置
+            if (type == "row_dependent") {
+                config = rowObj["widget_def"].toObject();
+                type = config["type"].toString();
+            }
+
+            if (type == "label") {
+                QTableWidgetItem* item = new QTableWidgetItem(rowObj[key].toString());
+                item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+                table->setItem(row, col, item);
+            }
+            else if (type == "lineedit") {
+                QLineEdit* le = new QLineEdit(rowObj[key].toString());
+                table->setCellWidget(row, col, le);
+            }
+            else if (type == "spinbox") {
+                QSpinBox* sb = new QSpinBox();
+                sb->setRange(config["min"].toInt(), config["max"].toInt());
+                sb->setValue(rowObj[key].toInt());
+                table->setCellWidget(row, col, sb);
+            }
+            else if (type == "double_spinbox") {
+                QDoubleSpinBox* dsb = new QDoubleSpinBox();
+                dsb->setRange(config["min"].toDouble(), config["max"].toDouble());
+                dsb->setDecimals(config["decimals"].toInt());
+                dsb->setValue(rowObj[key].toDouble());
+                table->setCellWidget(row, col, dsb);
+            }
+            else if (type == "combobox") {
+                QComboBox* cb = new QComboBox();
+                for (const auto& opt : config["options"].toArray()) {
+                    cb->addItem(opt.toString());
+                }
+                cb->setCurrentText(rowObj[key].toString());
+                table->setCellWidget(row, col, cb);
+            }
+        }
+    }
+}
+
+void ConfigPage::loadStationData(int index)
+{
+    QString stationPrefix = QString("Station_%1").arg(index + 1);
+
+    // 调用底层的通用读取函数
+    loadTableFromIni(ui->tableWidget, m_colsDataMapping, stationPrefix + "_DataMapping");
+    loadTableFromIni(ui->tableWidget_2, m_colsCommConfig, stationPrefix + "_Comm");
+    loadTableFromIni(ui->tableWidget_3, m_colsAlarmLimit, stationPrefix + "_Alarm");
+}
+
+void ConfigPage::loadTableFromIni(QTableWidget* table, const QJsonArray& colCache, const QString& section)
+{
+    QSettings settings(m_iniPath, QSettings::IniFormat);
+
+    for (int row = 0; row < table->rowCount(); ++row) {
+        QString paramName = table->item(row, 0)->text();
+
+        for (int col = 1; col < colCache.size(); ++col) {
+            QJsonObject colDef = colCache[col].toObject();
+            QString keyBase = colDef["key"].toString().remove("param_");
+            QString iniKey = QString("%1/%2_%3").arg(section, paramName, keyBase);
+
+            if (!settings.contains(iniKey)) continue;
+
+            QWidget* widget = table->cellWidget(row, col);
+            if (auto* le = qobject_cast<QLineEdit*>(widget)) {
+                le->setText(settings.value(iniKey).toString());
+            }
+            else if (auto* sb = qobject_cast<QSpinBox*>(widget)) {
+                sb->setValue(settings.value(iniKey).toInt());
+            }
+            else if (auto* dsb = qobject_cast<QDoubleSpinBox*>(widget)) {
+                dsb->setValue(settings.value(iniKey).toDouble());
+            }
+            else if (auto* cb = qobject_cast<QComboBox*>(widget)) {
+                cb->setCurrentText(settings.value(iniKey).toString());
+            }
+        }
+    }
+}
+
+void ConfigPage::saveTableToIni(QTableWidget* table, const QJsonArray& colCache, const QString& section)
+{
+    QDir().mkpath(QCoreApplication::applicationDirPath() + "/config");
+    QSettings settings(m_iniPath, QSettings::IniFormat);
+
+    for (int row = 0; row < table->rowCount(); ++row) {
+        QString paramName = table->item(row, 0)->text();
+
+        for (int col = 1; col < colCache.size(); ++col) {
+            QJsonObject colDef = colCache[col].toObject();
+            QString keyBase = colDef["key"].toString().remove("param_");
+            QString iniKey = QString("%1/%2_%3").arg(section, paramName, keyBase);
+
+            QWidget* widget = table->cellWidget(row, col);
+            if (auto* le = qobject_cast<QLineEdit*>(widget)) {
+                settings.setValue(iniKey, le->text());
+            }
+            else if (auto* sb = qobject_cast<QSpinBox*>(widget)) {
+               settings.setValue(iniKey, sb->value());
+            }
+            else if (auto* dsb = qobject_cast<QDoubleSpinBox*>(widget)) {
+                settings.setValue(iniKey, dsb->value());
+            }
+            else if (auto* cb = qobject_cast<QComboBox*>(widget)) {
+                settings.setValue(iniKey, cb->currentText());
+            }
+        }
+    }
+    settings.sync();
+}

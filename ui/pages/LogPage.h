@@ -2,6 +2,8 @@
 
 #include <QtWidgets/QWidget>
 #include "ui_LogPage.h"
+#include <QChart>
+#include <QFile>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class LogPageClass; };
@@ -16,6 +18,10 @@ public:
     ~LogPage();
 
 private:
+	//初始化界面
+    void initUI();
+    QString loadLog();
+
     Ui::LogPageClass* ui;
 };
 

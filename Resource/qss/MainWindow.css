@@ -1,0 +1,18 @@
+/*顶栏*/
+#topBar{
+    background-color:lightgrey;
+}
+
+#analysisBtn, #logBtn, #configBtn, #acquisitionBtn {
+    background-color: steelblue;
+    color: white;
+    font-size: 15px
+}
+
+    #analysisBtn:hover, #logBtn:hover, #configBtn:hover, #acquisitionBtn:hover {
+        background-color: #8bbbe3;
+    }
+
+    #analysisBtn:pressed, #logBtn:pressed, #configBtn:pressed, #acquisitionBtn:pressed {
+        background-color: #0f4878;
+    }

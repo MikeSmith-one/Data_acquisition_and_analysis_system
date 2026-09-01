@@ -1,0 +1,22 @@
+{
+  "extraction_modes": [
+    {
+      "id": "time_point",
+      "text": "时间点",
+      "unit": "s",
+      "placeholder": "50"
+    },
+    {
+      "id": "steady_state",
+      "text": "稳态平均",
+      "unit": "s ~ s",
+      "placeholder": "100-150"
+    },
+    {
+      "id": "max_value",
+      "text": "极值提取",
+      "unit": "时刻",
+      "placeholder": "自动"
+    }
+  ]
+}

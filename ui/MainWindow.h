@@ -20,7 +20,12 @@ public:
     ~MainWindow();
 
 private:
+    void initUI();
+    QString loadQss();
+
     Ui::MainWindowClass *ui;
+
+	//指向各个页面的指针
     AcquisitionPage* m_acquisitionPage = nullptr;
 	AnalysisPage* m_analysisPage = nullptr;
 	LogPage* m_logPage = nullptr;

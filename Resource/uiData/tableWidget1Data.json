@@ -1,0 +1,44 @@
+{
+  "metrics": [
+    {
+      "id": "q_in",
+      "name": "流量 q",
+      "unit": "L/min"
+    },
+    {
+      "id": "p_drop",
+      "name": "压降ΔP",
+      "unit": "kPa"
+    },
+    {
+      "id": "t_in",
+      "name": "冷却液进口温度 Tin",
+      "unit": "℃"
+    },
+    {
+      "id": "t_out",
+      "name": "冷却液出口温度 Tout",
+      "unit": "℃"
+    },
+    {
+      "id": "t_avg",
+      "name": "热源平均温度 Tavg",
+      "unit": "℃"
+    },
+    {
+      "id": "t_max",
+      "name": "热源最高温度 Tmax",
+      "unit": "℃"
+    },
+    {
+      "id": "dt",
+      "name": "冷板温度均匀性 ΔT",
+      "unit": "℃"
+    },
+    {
+      "id": "r_th",
+      "name": "热阻 Rth",
+      "unit": "℃/W"
+    }
+  ]
+}

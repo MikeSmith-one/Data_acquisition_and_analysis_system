@@ -1,10 +1,15 @@
 #include "MainWindow.h"
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindowClass())
 {
     ui->setupUi(this);
+
+    initUI();
+
+    resize(1360, 740);
 
     //4、参数配置界面
     m_configPage = new ConfigPage(this);
@@ -48,3 +53,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::initUI()
+{
+    QString qss = loadQss();
+    this->setStyleSheet(qss);
+}
+
+QString MainWindow::loadQss()
+{
+    QFile file(":/Resource/qss/MainWindow.css");
+ 
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "打开文件失败!";
+        return "";
+    }
+
+    return file.readAll();
+}

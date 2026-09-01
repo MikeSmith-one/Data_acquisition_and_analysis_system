@@ -1,0 +1,116 @@
+/*顶栏*/
+#toolBar {
+    background-color: rgb(226, 226, 226);
+}
+
+/*左侧边栏*/
+#leftDock {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+}
+
+#leftTopLabel1 {
+    color: white;
+    background-color: #055191;
+}
+
+#leftTopLabel2 {
+    color: white;
+    background-color: #2092ce;
+}
+
+/*右侧边栏*/
+#getDataArea {
+    background-color: #94b7d4;
+}
+
+#outputBtn, #getDataBtn {
+    background-color: steelblue;
+    color: black;
+    font-size: 15px;
+}
+    #outputBtn:hover, #getDataBtn:hover {
+        background-color: #8bbbe3;
+    }
+
+    #outputBtn:pressed, #getDataBtn:pressed {
+        background-color: #0f4878;
+    }
+
+#dataPanel {
+    background-color: #e7e2e2;
+}
+
+#rightDock {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+}
+
+/*tableWidget美化*/
+/*首列的全局字体加粗与颜色*/
+QTableWidget::item[isTitle="true"] {
+    font-weight: bold;
+    color: #222222;
+    background-color: #FAFAFA;
+}
+
+/*表格单元格默认字体与颜色*/
+QTableWidget {
+    font-family: "Microsoft YaHei";
+    font-size: 13px;
+    color: #333333;
+    background-color: #FFFFFF;
+    border: 1px solid #A0A0A0;
+    gridline-color: transparent;
+}
+
+    /*单元格边框与间距*/
+    QTableWidget::item {
+        border-bottom: 2px solid #D0D0D0;
+        border-right: 2px solid #D0D0D0;
+        padding: 5px;
+    }
+
+        /*单元格选中时的字体与颜色*/
+        QTableWidget::item:selected {
+            background-color: #E8F2FE;
+            color: #000000;
+            font-weight: bold;
+        }
+
+/*表头全局字体与样式*/
+QHeaderView::section {
+    background-color: #F5F6F8;
+    border: none;
+    border-bottom: 2px solid #A0A0A0;
+    border-right: 2px solid #D0D0D0;
+    font-family: "Microsoft YaHei";
+    font-size: 13px;
+    font-weight: bold;
+    color: #ea8007;
+    min-height: 40px;
+}
+
+/*隐藏侧栏按钮*/
+#leftBtn, #rightBtn {
+    background-color: #FFFFFF;
+    border: 2px solid #C0D6E4;
+    border-radius: 10px;
+    min-width: 20px;
+    min-height: 50px;
+    color: #333333;
+    font-weight: bold;
+}
+
+    #leftBtn:hover, #rightBtn:hover {
+        background-color: #E6F0FA;
+        border-color: #5B9BD5
+    }
+
+    #leftBtn:pressed, #rightBtn:pressed {
+        background-color: #D0E0F0;
+    }

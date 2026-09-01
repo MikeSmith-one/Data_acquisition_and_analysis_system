@@ -1,0 +1,59 @@
+{
+  "columns": [
+    {
+      "key": "param_name",
+      "title": "参数名称",
+      "type": "label"
+    },
+    {
+      "key": "limit_lower",
+      "title": "报警下限",
+      "type": "double_spinbox",
+      "min": -100.0,
+      "max": 500.0,
+      "step": 1.0,
+      "decimals": 2
+    },
+    {
+      "key": "limit_upper",
+      "title": "报警上限",
+      "type": "double_spinbox",
+      "min": -100.0,
+      "max": 500.0,
+      "step": 1.0,
+      "decimals": 2
+    }
+  ],
+  "default_data": [
+    {
+      "param_name": "Tin",
+      "limit_lower": 0.0,
+      "limit_upper": 40.0
+    },
+    {
+      "param_name": "Tout",
+      "limit_lower": 0.0,
+      "limit_upper": 60.0
+    },
+    {
+      "param_name": "Tavg",
+      "limit_lower": 0.0,
+      "limit_upper": 70.0
+    },
+    {
+      "param_name": "Tmax",
+      "limit_lower": 0.0,
+      "limit_upper": 75.0
+    },
+    {
+      "param_name": "q (flow)",
+      "limit_lower": 2.0,
+      "limit_upper": 100.0
+    },
+    {
+      "param_name": "ΔP",
+      "limit_lower": 0.0,
+      "limit_upper": 22.0
+    }
+  ]
+}

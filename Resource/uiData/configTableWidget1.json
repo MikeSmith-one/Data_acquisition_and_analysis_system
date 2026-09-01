@@ -1,0 +1,88 @@
+{
+  "columns": [
+    {
+      "key": "param_name",
+      "title": "参数名称",
+      "type": "label"
+    },
+    {
+      "key": "reg_addr",
+      "title": "Modbus 寄存器地址 (Decimal)",
+      "type": "spinbox",
+      "min": 0,
+      "max": 65535
+    },
+    {
+      "key": "reg_type",
+      "title": "寄存器类型",
+      "type": "combobox",
+      "options": [ "Holding", "Input" ]
+    },
+    {
+      "key": "data_format",
+      "title": "数据格式",
+      "type": "combobox",
+      "options": [ "Float", "Int16", "UInt16" ]
+    },
+    {
+      "key": "scale_factor",
+      "title": "缩放系数",
+      "type": "double_spinbox",
+      "min": 0.01,
+      "max": 100.0,
+      "step": 0.1,
+      "decimals": 2
+    }
+  ],
+  "default_data": [
+    {
+      "param_name": "Tin",
+      "reg_addr": 100,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    },
+    {
+      "param_name": "Tout",
+      "reg_addr": 102,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    },
+    {
+      "param_name": "Tavg",
+      "reg_addr": 104,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    },
+    {
+      "param_name": "Tmax",
+      "reg_addr": 106,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    },
+    {
+      "param_name": "ΔT",
+      "reg_addr": 108,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    },
+    {
+      "param_name": "Rth",
+      "reg_addr": 110,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    },
+    {
+      "param_name": "flow",
+      "reg_addr": 112,
+      "reg_type": "Holding",
+      "data_format": "Float",
+      "scale_factor": 1.00
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "analysis_modes": [
+    {
+      "id": "time_point",
+      "text": "时间点",
+      "hint": "提取指定时刻瞬时值",
+      "unit": "s",
+      "default_val": "50"
+    },
+    {
+      "id": "steady_state",
+      "text": "稳态平均",
+      "hint": "提取热平衡阶段均值",
+      "unit": "s (末段)",
+      "default_val": "60"
+    },
+    {
+      "id": "full_cycle",
+      "text": "全周期统计",
+      "hint": "计算全过程聚合指标",
+      "unit": "全长",
+      "default_val": "AUTO"
+    },
+    {
+      "id": "peak_value",
+      "text": "峰值工况",
+      "hint": "抓取最大热阻/最高温时刻",
+      "unit": "极值点",
+      "default_val": "Max T"
+    },
+    {
+      "id": "custom_range",
+      "text": "自定义区间",
+      "hint": "使用左下角设置的时间段",
+      "unit": "s ~ s",
+      "default_val": "跟随设置"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "metrics": [
+    {
+      "id": "q_in_avg",
+      "name": "平均流量 q",
+      "unit": "L/min"
+    },
+    {
+      "id": "p_drop_avg",
+      "name": "平均压降ΔP",
+      "unit": "kPa"
+    },
+    {
+      "id": "p_drop_max",
+      "name": "最大压降ΔP",
+      "unit": "kPa"
+    },
+    {
+      "id": "t_max_avg",
+      "name": "平均最高温度 Tmax",
+      "unit": "℃"
+    },
+    {
+      "id": "t_max",
+      "name": "最大最高温度 Tmax",
+      "unit": "℃"
+    },
+    {
+      "id": "t_liquid_avg",
+      "name": "冷却液平均温度 Tavg",
+      "unit": "℃"
+    },
+    {
+      "id": "dt_avg",
+      "name": "平均温度均匀性 ΔT",
+      "unit": "℃"
+    },
+    {
+      "id": "r_th_avg",
+      "name": "平均热阻 Rth",
+      "unit": "℃/W"
+    }
+  ]
+}

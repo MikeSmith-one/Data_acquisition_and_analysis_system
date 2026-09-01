@@ -1,0 +1,57 @@
+{
+  "columns": [
+    {
+      "key": "param_name",
+      "title": "配置项",
+      "type": "label"
+    },
+    {
+      "key": "param_value",
+      "title": "设定值",
+      "type": "row_dependent"
+    }
+  ],
+  "default_data": [
+    {
+      "param_name": "通信协议",
+      "param_value": "Modbus TCP",
+      "widget_def": {
+        "type": "combobox",
+        "options": [ "Modbus TCP", "Modbus RTU" ]
+      }
+    },
+    {
+      "param_name": "设备 IP 地址",
+      "param_value": "192.168.1.100",
+      "widget_def": { "type": "lineedit" }
+    },
+    {
+      "param_name": "设备端口",
+      "param_value": 502,
+      "widget_def": {
+        "type": "spinbox",
+        "min": 1,
+        "max": 65535
+      }
+    },
+    {
+      "param_name": "从站 ID",
+      "param_value": 1,
+      "widget_def": {
+        "type": "spinbox",
+        "min": 1,
+        "max": 255
+      }
+    },
+    {
+      "param_name": "轮询周期 (ms)",
+      "param_value": 1000,
+      "widget_def": {
+        "type": "spinbox",
+        "min": 100,
+        "max": 10000,
+        "step": 100
+      }
+    }
+  ]
+}

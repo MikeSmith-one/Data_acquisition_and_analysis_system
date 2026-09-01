@@ -6,17 +6,41 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1014</width>
+    <width>1051</width>
     <height>736</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QWidget" name="toolBarWidget" native="true">
+    <widget class="QWidget" name="toolBar" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QLabel" name="toolBarLabel">
         <property name="text">
@@ -124,11 +148,11 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1">
      <item>
-      <widget class="QWidget" name="leftDockWidget_2" native="true">
+      <widget class="QWidget" name="leftDock" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -139,21 +163,9 @@
          <height>16777215</height>
         </size>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="leftTopLabel1">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:700;&quot;&gt;数据选择&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
@@ -163,10 +175,58 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="listWidget"/>
+         <widget class="QListView" name="listView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_3">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;开始时期：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDateEdit" name="dateEditStart">
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;结束时期：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="dateEditEnd">
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="leftTopLabel2">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt; font-weight:700;&quot;&gt;分析设置&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
@@ -176,58 +236,8 @@
          </widget>
         </item>
         <item>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="startTimeEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="endTimeEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;结束时期：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;开始时期：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QLabel" name="label_6">
@@ -245,7 +255,9 @@
                </sizepolicy>
               </property>
               <property name="font">
-               <font/>
+               <font>
+                <bold>true</bold>
+               </font>
               </property>
               <item>
                <property name="text">
@@ -256,14 +268,14 @@
             </item>
            </layout>
           </item>
-          <item>
+          <item row="1" column="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;自定义时间：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QLineEdit" name="diyTimeEdit1">
@@ -278,6 +290,11 @@
                 <width>50</width>
                 <height>0</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
               </property>
              </widget>
             </item>
@@ -321,6 +338,11 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
              </widget>
             </item>
             <item>
@@ -347,9 +369,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="chartZoneWidget" native="true">
+      <widget class="QWidget" name="chartZone" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -371,11 +393,42 @@
          <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>0</number>
+         <number>9</number>
         </property>
         <property name="spacing">
          <number>0</number>
         </property>
+        <item row="0" column="1">
+         <widget class="QChartView" name="chart1" native="true"/>
+        </item>
+        <item row="0" column="3" rowspan="2">
+         <widget class="QPushButton" name="rightBtn">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>24</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>24</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QChartView" name="chart2" native="true"/>
+        </item>
         <item row="0" column="0" rowspan="2">
          <widget class="QPushButton" name="leftBtn">
           <property name="sizePolicy">
@@ -404,85 +457,59 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QChartView" name="chart1" native="true"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QChartView" name="chart2" native="true"/>
-        </item>
-        <item row="0" column="3" rowspan="2">
-         <widget class="QPushButton" name="rightBtn">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>24</width>
-            <height>80</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>24</width>
-            <height>80</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>&gt;</string>
-          </property>
-         </widget>
+        <item row="1" column="1">
+         <widget class="QChartView" name="chart3" native="true"/>
         </item>
         <item row="1" column="2">
          <widget class="QChartView" name="chart4" native="true"/>
-        </item>
-        <item row="1" column="1">
-         <widget class="QChartView" name="chart3" native="true"/>
         </item>
        </layout>
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-weight:700;&quot;&gt;统计摘要                         &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="0" column="1">
-          <widget class="QComboBox" name="timePointBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+      <widget class="QWidget" name="rightDock" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="getDataArea" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="leftMargin">
+            <number>6</number>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>0</height>
-            </size>
+           <property name="topMargin">
+            <number>0</number>
            </property>
-           <property name="font">
-            <font/>
+           <property name="rightMargin">
+            <number>0</number>
            </property>
-           <item>
-            <property name="text">
-             <string>时间点</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <spacer name="horizontalSpacer_4">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_2">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
              </property>
@@ -497,41 +524,32 @@
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QPushButton" name="outputBtn">
+           <item row="2" column="4">
+            <widget class="QPushButton" name="getDataBtn">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>130</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <bold>true</bold>
+              </font>
+             </property>
              <property name="text">
-              <string>导出</string>
+              <string>生成摘要</string>
              </property>
             </widget>
            </item>
-          </layout>
-         </item>
-         <item row="1" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_7"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;提取模式：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_8">
-           <item>
-            <spacer name="horizontalSpacer_5">
+           <item row="2" column="3">
+            <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
              </property>
@@ -546,50 +564,116 @@
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QPushButton" name="makeSummaryBtn">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_10">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;提取模式：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="comboBoxMode"/>
+           </item>
+           <item row="1" column="4">
+            <widget class="QPushButton" name="outputBtn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <bold>true</bold>
+              </font>
              </property>
              <property name="text">
-              <string>生成摘要</string>
+              <string>导出</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QLineEdit" name="lineEditTime">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelUnit">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:700;&quot;&gt;S&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;提取数据：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-weight:700;&quot;&gt;统计摘要 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
           </layout>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;提取数据：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>
