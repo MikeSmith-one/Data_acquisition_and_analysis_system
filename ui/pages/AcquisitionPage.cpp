@@ -12,6 +12,7 @@ AcquisitionPage::AcquisitionPage(QWidget* parent)
     //默认初始化为 1 个工位，防止 UI 出现空载状态
     updateStationCount(1);
 
+    //连接单例中的信号更新界面参数
     connect(ConfigManager::instance(), &ConfigManager::configUpdated, this, &AcquisitionPage::onConfigReloaded);
 
 	//连接“提取模式”下拉框的信号槽实现动态更新右侧单位 Label 和输入框占位符
@@ -254,6 +255,7 @@ void AcquisitionPage::updateStationCount(int count)
     updateTableColumns(count);
 }
 
+//重载界面配置
 void AcquisitionPage::onConfigReloaded(int stationCount)
 {
     // 1. 刷新界面 UI（更新站号下拉框选项、重绘监控表格的列数）

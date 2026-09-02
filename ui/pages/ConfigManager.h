@@ -1,4 +1,5 @@
 #pragma once
+/*用于全局配置管理，将ConfigPage的配置信息集中管理，便于其它页面调用以及更新dev-config.ini配置文件*/
 #include <QObject>
 #include <QSettings>
 #include <QVariantMap>
@@ -7,22 +8,22 @@
 
 struct PointMapping {
     QString paramName;
-    int regAddr;
-    QString regType;   // "Holding" / "Input"
-    QString dataFormat;// "Float" / "Int16"
+    int regAddr;//寄存器地址 
+    QString regType;//"Holding" / "Input"
+    QString dataFormat;//"Float" / "Int16"
     double scaleFactor;
 };
 
 struct StationConfig {
-    // 通信参数
+    //通信参数
     QString protocol;
     QString ip;
     int port;
     int slaveId;
     int pollPeriod;
-    // 数据映射与阈值
+    //数据映射与阈值
     QVector<PointMapping> mappings;
-    QMap<QString, QPair<double, double>> alarmLimits; // 参数名 -> <下限, 上限>
+    QMap<QString, QPair<double, double>> alarmLimits;//参数名 -> <下限, 上限>
 };
 
 struct GlobalConfig {

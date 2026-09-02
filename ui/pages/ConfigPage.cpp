@@ -8,23 +8,6 @@ ConfigPage::ConfigPage(QWidget* parent)
     ui->setupUi(this);
 
     initUI();
-
-	//初始化1个工位，防止 UI 出现空载状态
-    updateStationCount(1);
-
-    // 1. 初始化路径
-    m_iniPath = QCoreApplication::applicationDirPath() + "/config/dev_config.ini";
-
-    // 2. 初始化UI结构
-    initTableWidget(ui->tableWidget, ":/Resource/uiData/configTableWidget1.json", m_colsDataMapping);
-    initTableWidget(ui->tableWidget_2, ":/Resource/uiData/configTableWidget2.json", m_colsCommConfig);
-    initTableWidget(ui->tableWidget_3, ":/Resource/uiData/configTableWidget3.json", m_colsAlarmLimit);
-
-    // 3. 假设加载工位1 (Index 0)
-    //QString stName = "Station_1";
-    //loadTableFromIni(ui->tableWidget, m_colsDataMapping, stName + "_DataMapping");
-    //loadTableFromIni(ui->tableWidget_2, m_colsCommConfig, stName + "_Comm");
-    //loadTableFromIni(ui->tableWidget_3, m_colsAlarmLimit, stName + "_Alarm");
 }
 
 ConfigPage::~ConfigPage()
@@ -37,22 +20,22 @@ void ConfigPage::initUI()
     QString qss = loadQss();
     this->setStyleSheet(qss);
 
-    // 1. 设置默认路径并显示在顶部 LineEdit
+    //设置默认路径并显示在顶部 LineEdit
     QString defaultPath = QCoreApplication::applicationDirPath() + "/config/dev_config.ini";
     ConfigManager::instance()->setIniPath(defaultPath);
     ui->iniPath->setText(defaultPath);
 
-    // 2. 通过 JSON 绘制三个表格的 UI 骨架 (复用之前的 initTableWidget 逻辑)
+    //通过 JSON 绘制三个表格的 UI 骨架
     initTableWidget(ui->tableWidget, ":/Resource/uiData/configTableWidget1.json", m_colsDataMapping);
     initTableWidget(ui->tableWidget_2, ":/Resource/uiData/configTableWidget2.json", m_colsCommConfig);
     initTableWidget(ui->tableWidget_3, ":/Resource/uiData/configTableWidget3.json", m_colsAlarmLimit);
 
-    // 3. 从 INI 读取全局工位数量并同步 UI
+    //从 INI 读取全局工位数量并同步 UI
     int count = ConfigManager::instance()->getStationCount();
     ui->stationNum->setValue(count);
     updateStationCount(count); // 刷新 presentStation 下拉框
 
-    // 4. 默认加载工位 1 的数据
+    //默认加载工位 1 的数据
     loadStationData(0);
 }
 
@@ -93,7 +76,7 @@ void ConfigPage::on_presentStation_currentIndexChanged(int index)
     ui->dataMappingBox->setTitle("数据点表映射 " + titleSuffix);
     ui->warningBox->setTitle("报警阈值 " + titleSuffix);
 
-    // 从 INI 中加载新工位的数据并覆写到表格中
+    //从 INI 中加载新工位的数据并覆写到表格中
     loadStationData(index);
 }
 
@@ -111,7 +94,7 @@ void ConfigPage::on_savePresentConfigBtn_clicked()
     //弹窗提示
     QMessageBox::information(this, "提示", QString("工位 %1 配置已保存！").arg(index + 1));
 
-    //通知后台，当前工位配置已变
+    //通知后台，当前工位配置已变？？？
     emit ConfigManager::instance()->configUpdated(ui->stationNum->value());
 }
 
@@ -122,7 +105,7 @@ void ConfigPage::on_globalSaveBtn_clicked()
     QString path = ConfigManager::instance()->getIniPath();
     QSettings settings(path, QSettings::IniFormat);
 
-    //写入全局变量
+    //写入全局变量至 INI 文件
     settings.setValue("Global/StationCount", newCount);
     settings.setValue("Global/SavePeriod", ui->dataSavePeriod->currentText());
     settings.setValue("Global/SaveLocation", ui->saveLocation->text());
@@ -147,7 +130,7 @@ void ConfigPage::on_toolButton_2_clicked()
         ui->iniPath->setText(fileName);
         ConfigManager::instance()->setIniPath(fileName);
 
-        // 重新读取并刷新整个界面
+        //重新读取并刷新整个界面
         int count = ConfigManager::instance()->getStationCount();
         ui->stationNum->setValue(count);
         updateStationCount(count);
@@ -155,6 +138,7 @@ void ConfigPage::on_toolButton_2_clicked()
     }
 }
 
+//从json文件中加载数据初始化表格
 void ConfigPage::initTableWidget(QTableWidget* table, const QString& jsonPath, QJsonArray& colCache)
 {
     QFile file(jsonPath);
@@ -229,19 +213,21 @@ void ConfigPage::initTableWidget(QTableWidget* table, const QString& jsonPath, Q
     }
 }
 
+//从 INI 文件中加载对应工位的数据
 void ConfigPage::loadStationData(int index)
 {
     QString stationPrefix = QString("Station_%1").arg(index + 1);
 
-    // 调用底层的通用读取函数
+    //调用底层的通用读取函数
     loadTableFromIni(ui->tableWidget, m_colsDataMapping, stationPrefix + "_DataMapping");
     loadTableFromIni(ui->tableWidget_2, m_colsCommConfig, stationPrefix + "_Comm");
     loadTableFromIni(ui->tableWidget_3, m_colsAlarmLimit, stationPrefix + "_Alarm");
 }
 
+//从 INI 文件中读取数据覆写表格
 void ConfigPage::loadTableFromIni(QTableWidget* table, const QJsonArray& colCache, const QString& section)
 {
-    QSettings settings(m_iniPath, QSettings::IniFormat);
+    QSettings settings(ConfigManager::instance()->getIniPath(), QSettings::IniFormat);
 
     for (int row = 0; row < table->rowCount(); ++row) {
         QString paramName = table->item(row, 0)->text();
@@ -270,10 +256,11 @@ void ConfigPage::loadTableFromIni(QTableWidget* table, const QJsonArray& colCach
     }
 }
 
+//从表格读取数据覆写到 INI 文件
 void ConfigPage::saveTableToIni(QTableWidget* table, const QJsonArray& colCache, const QString& section)
 {
     QDir().mkpath(QCoreApplication::applicationDirPath() + "/config");
-    QSettings settings(m_iniPath, QSettings::IniFormat);
+    QSettings settings(ConfigManager::instance()->getIniPath(), QSettings::IniFormat);
 
     for (int row = 0; row < table->rowCount(); ++row) {
         QString paramName = table->item(row, 0)->text();

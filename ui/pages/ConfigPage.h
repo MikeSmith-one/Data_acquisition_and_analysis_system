@@ -59,22 +59,20 @@ private:
     void initUI();
     QString loadQss();
 
-    // 通用表格初始化函数
+    //通用表格初始化函数
     void initTableWidget(QTableWidget* table, const QString& jsonPath, QJsonArray& colCache);
 
-    // 通用 INI 读写函数
+    //从 INI 读取参数配置
     void loadTableFromIni(QTableWidget* table, const QJsonArray& colCache, const QString& section);
     void saveTableToIni(QTableWidget* table, const QJsonArray& colCache, const QString& section);
 
 	//加载指定工位的配置数据到界面
     void loadStationData(int index);
 
-    // 各个表格的列结构缓存
+    //各个表格的列结构缓存
     QJsonArray m_colsDataMapping; //数据点映射
     QJsonArray m_colsCommConfig;  //通信设置
     QJsonArray m_colsAlarmLimit;  //报警阈值
-
-    QString m_iniPath; // 缓存 INI 绝对路径
 
     Ui::ConfigPageClass* ui;
 };
