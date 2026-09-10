@@ -118,18 +118,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="loadingConfigBtn">
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>加载配置</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="savePresentConfigBtn">
         <property name="font">
          <font>

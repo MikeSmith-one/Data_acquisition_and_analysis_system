@@ -19,6 +19,7 @@ find_package(Qt${QT_VERSION_MAJOR}
         Network
         Sql
         Charts
+        SerialBus
 )
 
 qt_standard_project_setup()
@@ -87,4 +88,5 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Network
         Qt::Sql
         Qt::Charts
+        Qt6::SerialBus
 )

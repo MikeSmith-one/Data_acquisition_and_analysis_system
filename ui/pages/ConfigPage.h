@@ -52,6 +52,9 @@ private slots:
 	//保存全局配置 (全局保存)
     void on_globalSaveBtn_clicked();
 
+    //恢复当前工位默认配置 (从 JSON 重新加载)
+    void on_resumeConfigBtn_clicked();
+
     //选择新的配置文件 (顶栏 ToolButton)
     void on_toolButton_2_clicked();
 private:

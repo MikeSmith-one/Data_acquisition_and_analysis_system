@@ -70,7 +70,7 @@ void ConfigPage::on_presentStation_currentIndexChanged(int index)
 {
     if (index < 0) return;
 
-    // 更新 GroupBox 标题
+    //更新 GroupBox 标题
     QString titleSuffix = QString("(工位%1)").arg(index + 1);
     ui->telemessageBox->setTitle("通信设置 " + titleSuffix);
     ui->dataMappingBox->setTitle("数据点表映射 " + titleSuffix);
@@ -94,7 +94,7 @@ void ConfigPage::on_savePresentConfigBtn_clicked()
     //弹窗提示
     QMessageBox::information(this, "提示", QString("工位 %1 配置已保存！").arg(index + 1));
 
-    //通知后台，当前工位配置已变？？？
+    //通知后台，当前工位配置已变
     emit ConfigManager::instance()->configUpdated(ui->stationNum->value());
 }
 
@@ -120,6 +120,31 @@ void ConfigPage::on_globalSaveBtn_clicked()
 
     //广播全局信号，采集页面收到后重构界面列数
     emit ConfigManager::instance()->configUpdated(newCount);
+}
+
+//槽函数：恢复当前工位默认配置
+void ConfigPage::on_resumeConfigBtn_clicked()
+{
+    int currentIndex = ui->presentStation->currentIndex();
+    if (currentIndex < 0) return;
+
+    //防误触弹窗提示
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this, "确认重置",
+        QString("是否确定将【工位 %1】的配置恢复为系统默认配置？\n\n（注意：此操作仅重置当前界面显示，需要点击「保存当前工作配置」才会覆写到配置文件）")
+        .arg(currentIndex + 1),
+        QMessageBox::Yes | QMessageBox::No
+    );
+
+    if (reply != QMessageBox::Yes) return;
+
+    //重新调用 initTableWidget 从 JSON 文件读取默认模版并填充表格 UI
+    initTableWidget(ui->tableWidget, ":/Resource/uiData/configTableWidget1.json", m_colsDataMapping);
+    initTableWidget(ui->tableWidget_2, ":/Resource/uiData/configTableWidget2.json", m_colsCommConfig);
+    initTableWidget(ui->tableWidget_3, ":/Resource/uiData/configTableWidget3.json", m_colsAlarmLimit);
+
+    //完成提示
+    QMessageBox::information(this, "提示", QString("工位 %1 已成功恢复为默认配置！").arg(currentIndex + 1));
 }
 
 //槽函数：选择新的配置文件 (顶栏 ToolButton)

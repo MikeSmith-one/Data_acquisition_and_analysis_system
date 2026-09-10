@@ -7,28 +7,28 @@
 #include <QMap>
 
 struct PointMapping {
-    QString paramName;
+    QString paramName;//参数名
     int regAddr;//寄存器地址 
     QString regType;//"Holding" / "Input"
     QString dataFormat;//"Float" / "Int16"
-    double scaleFactor;
+    double scaleFactor;//缩放系数
 };
 
 struct StationConfig {
     //通信参数
-    QString protocol;
+    QString protocol;//通信协议
     QString ip;
     int port;
-    int slaveId;
-    int pollPeriod;
+    int slaveId;//从站ID（单位标识符）
+    int pollPeriod;//轮询周期
     //数据映射与阈值
-    QVector<PointMapping> mappings;
-    QMap<QString, QPair<double, double>> alarmLimits;//参数名 -> <下限, 上限>
+	QVector<PointMapping> mappings;//参数映射列表，存放了每个工位的配置信息
+    QMap<QString, QPair<double, double>> alarmLimits;//参数名 -> <下限, 上限> //各个工位的报警阈值
 };
 
 struct GlobalConfig {
-    int stationCount;
-    QVector<StationConfig> stations;
+	int stationCount;//工位数量
+    QVector<StationConfig> stations;//工位配置列表，存放了所有工位的配置信息
 };
 
 
