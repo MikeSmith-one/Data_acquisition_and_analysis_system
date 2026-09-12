@@ -37,6 +37,9 @@ void ConfigPage::initUI()
 
     //默认加载工位 1 的数据
     loadStationData(0);
+
+    //初始化完成后，将配置文件载入 ConfigManager 内存
+    ConfigManager::instance()->loadConfigFromIni();
 }
 
 QString ConfigPage::loadQss()
@@ -83,6 +86,12 @@ void ConfigPage::on_presentStation_currentIndexChanged(int index)
 //槽函数：保存当前工位配置 (局部保存)
 void ConfigPage::on_savePresentConfigBtn_clicked()
 {
+	//防止在采集中修改当前工位配置
+    if (m_isAcquisitionRunning) {
+        QMessageBox::warning(this, "警告", "正在采集中，无法保存配置！");
+        return;
+    }
+
     int index = ui->presentStation->currentIndex();
     QString stationPrefix = QString("Station_%1").arg(index + 1);
 
@@ -90,6 +99,9 @@ void ConfigPage::on_savePresentConfigBtn_clicked()
     saveTableToIni(ui->tableWidget, m_colsDataMapping, stationPrefix + "_DataMapping");
     saveTableToIni(ui->tableWidget_2, m_colsCommConfig, stationPrefix + "_Comm");
     saveTableToIni(ui->tableWidget_3, m_colsAlarmLimit, stationPrefix + "_Alarm");
+
+    //保存 INI 后，让 ConfigManager 同步加载最新的 INI 数据到内存
+    ConfigManager::instance()->loadConfigFromIni();
 
     //弹窗提示
     QMessageBox::information(this, "提示", QString("工位 %1 配置已保存！").arg(index + 1));
@@ -101,6 +113,12 @@ void ConfigPage::on_savePresentConfigBtn_clicked()
 //槽函数：保存全局配置 (全局保存)
 void ConfigPage::on_globalSaveBtn_clicked()
 {
+	//防止在采集中修改全局配置
+    if (m_isAcquisitionRunning) {
+        QMessageBox::warning(this, "警告", "正在采集中，无法保存配置！");
+        return;
+    }
+
     int newCount = ui->stationNum->value();
     QString path = ConfigManager::instance()->getIniPath();
     QSettings settings(path, QSettings::IniFormat);
@@ -112,6 +130,9 @@ void ConfigPage::on_globalSaveBtn_clicked()
     settings.setValue("Global/AutoClean", ui->switchAutoClean->isChecked());
     settings.setValue("Global/LogRetainDays", ui->saveDates->value());
     settings.sync();
+
+    //全局保存后，同步刷新内存数据
+    ConfigManager::instance()->loadConfigFromIni();
 
     //刷新下拉框
     updateStationCount(newCount);
@@ -311,4 +332,14 @@ void ConfigPage::saveTableToIni(QTableWidget* table, const QJsonArray& colCache,
         }
     }
     settings.sync();
+}
+
+void ConfigPage::setAcquisitionRunning(bool isRunning)
+{
+    m_isAcquisitionRunning = isRunning;
+
+    // 采集中禁用保存和重置按钮，防止误操作
+    ui->savePresentConfigBtn->setEnabled(!isRunning);
+    ui->globalSaveBtn->setEnabled(!isRunning);
+    ui->resumeConfigBtn->setEnabled(!isRunning);
 }

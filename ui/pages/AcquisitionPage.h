@@ -15,12 +15,15 @@
 #include <QDebug>
 #include <QStringListModel>
 #include <QHeaderView>
+#include "ConfigManager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AcquisitionPageClass; };
 QT_END_NAMESPACE
 
+//#########################################################
 //用于listView和TableWidget的数据结构体
+//#########################################################
 struct MetricInfo1 {
     QString id;
     QString name;
@@ -45,6 +48,12 @@ public slots:
     void onConfigReloaded(int stationCount);
 
 private slots:
+	//监听“停止采集”按钮点击事件，用于触发数据采集停止逻辑
+    void on_stopCollectBtn_clicked();
+
+	//监听“开始采集”按钮点击事件，用于触发数据采集逻辑
+    void on_startCollectBtn_clicked();
+
 	//用于处理ListView的选择变化事件，进而实现选中数量上限为4个
     void onListViewSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
@@ -55,6 +64,9 @@ private slots:
     void onAcquisitionExtractionModeChanged(int index);
 
 private:
+    //ConfigManager 测试函数，读取配置文件并打印到控制台
+    //void testConfigManager(QVector<StationConfig>* stationConfigs);
+
     //初始化界面
     void initUI();
     QString loadQss();

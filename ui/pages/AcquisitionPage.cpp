@@ -1,5 +1,4 @@
 #include "AcquisitionPage.h"
-#include "ConfigManager.h"
 
 AcquisitionPage::AcquisitionPage(QWidget* parent)
     : QWidget(parent)
@@ -119,6 +118,37 @@ void AcquisitionPage::initListViewModel(const QStringList& data)
 
     //连接信号槽，处理选择变化事件
     connect(ui->listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &AcquisitionPage::onListViewSelectionChanged);
+}
+
+// 停止采集按钮响应
+void AcquisitionPage::on_stopCollectBtn_clicked()
+{
+    //恢复按钮状态
+    ui->startCollectBtn->setEnabled(true);
+    ui->stopCollectBtn->setEnabled(false);
+    ui->readingIndicator->setText("读取已停止");
+
+    //通知网络层断开 TCP 连接、清空未处理的请求队列并安全退出子线程
+    //ModbusClient::instance()->stopWorking();
+}
+
+//开始采集按钮响应
+void AcquisitionPage::on_startCollectBtn_clicked()
+{
+    //切换按钮状态（UI 防抖与状态互斥）
+    ui->startCollectBtn->setEnabled(false);
+    ui->stopCollectBtn->setEnabled(true);
+    ui->readingIndicator->setText("实时读取中...");
+
+    //从配置管理器拉取最新、完整的工位配置列表
+    QVector<StationConfig> stationConfigs = ConfigManager::instance()->getStationsConfig();
+
+	//testConfigManager(&stationConfigs);
+    //将工位参数传递给网络层，启动 Modbus 轮询子线程
+    // 注意：这里需要根据实际情况调整 ModbusClient 的使用方式
+    // 例如，可能需要传递 stationConfigs 到 ModbusClient 的某个方法中
+    // 这里只是一个示例
+    //ModbusClient::instance()->startWorking(stationConfigs);
 }
 
 //处理ListView的选择变化事件，实现选中数量上限为4个
@@ -324,3 +354,43 @@ void AcquisitionPage::updateTableColumns(int stationCount)
     }
 }
 
+//测试 ConfigManager 读取配置文件的函数，打印到控制台
+/*
+void AcquisitionPage::testConfigManager(QVector<StationConfig>* stationConfigs) {
+    qDebug() << "========== 开始测试 ConfigManager 读取 ==========";
+
+    QVector<StationConfig> stations = *stationConfigs;
+    if (stations.isEmpty()) {
+        qDebug() << "警告: 未读取到任何工位配置，请检查 INI 路径或数据！";
+        return;
+    }
+
+    for (const StationConfig& station : stations) {
+        qDebug() << "----------------------------------------";
+        qDebug() << "工位 ID:" << station.stationId;
+        qDebug() << "[通信设置] IP:" << station.ip
+            << " | 端口:" << station.port
+            << " | 从站ID:" << station.slaveId
+            << " | 轮询周期:" << station.pollPeriod << "ms";
+
+        qDebug() << "[数据点映射] 共" << station.mappings.size() << "个点位:";
+        for (const PointMapping& mapping : station.mappings) {
+            qDebug() << "  ->" << mapping.paramName.leftJustified(5, ' ')
+                << "| 地址:" << QString::number(mapping.regAddr).leftJustified(4, ' ')
+                << "| 类型:" << mapping.regType.leftJustified(8, ' ')
+                << "| 格式:" << mapping.dataFormat.leftJustified(6, ' ')
+                << "| 缩放:" << mapping.scaleFactor;
+        }
+
+        qDebug() << "[报警阈值] 共" << station.alarmLimits.size() << "个参数:";
+        QMapIterator<QString, AlarmLimit> i(station.alarmLimits);
+        while (i.hasNext()) {
+            i.next();
+            qDebug() << "  ->" << i.key().leftJustified(5, ' ')
+                << "| 下限:" << QString::number(i.value().lowerLimit, 'f', 2).leftJustified(6, ' ')
+                << "| 上限:" << QString::number(i.value().upperLimit, 'f', 2);
+        }
+    }
+    qDebug() << "========== 测试 ConfigManager 读取结束 ==========";
+}
+*/

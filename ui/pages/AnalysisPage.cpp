@@ -1,4 +1,5 @@
 #include "AnalysisPage.h"
+#include "./pages/ConfigManager.h"
 
 AnalysisPage::AnalysisPage(QWidget* parent)
     : QWidget(parent)
@@ -7,6 +8,8 @@ AnalysisPage::AnalysisPage(QWidget* parent)
     ui->setupUi(this);
 
     initUI();
+
+    initDateFilters();
 
     //连接“提取模式”下拉框的信号槽实现动态更新右侧单位 Label 和输入框占位符
     connect(ui->comboBoxMode, QOverload<int>::of(&QComboBox::currentIndexChanged),

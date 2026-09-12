@@ -30,5 +30,8 @@ private:
 	AnalysisPage* m_analysisPage = nullptr;
 	LogPage* m_logPage = nullptr;
     ConfigPage* m_configPage = nullptr;
+
+    //ConfigManager 测试函数，读取配置文件并打印到控制台
+    //void testConfigManager();
 };
 

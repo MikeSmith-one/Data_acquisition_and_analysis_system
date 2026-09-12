@@ -15,8 +15,9 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class AnalysisPageClass; };
 QT_END_NAMESPACE
-
+//#########################################################
 //用于listView和TableWidget的数据结构体
+//#########################################################
 struct MetricInfo2 {
     QString id;
     QString name;

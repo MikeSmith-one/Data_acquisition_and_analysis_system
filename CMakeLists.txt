@@ -20,6 +20,7 @@ find_package(Qt${QT_VERSION_MAJOR}
         Sql
         Charts
         SerialBus
+        StateMachine
 )
 
 qt_standard_project_setup()
@@ -89,4 +90,5 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Sql
         Qt::Charts
         Qt6::SerialBus
+        Qt6::StateMachine
 )

@@ -34,6 +34,9 @@ public:
     ConfigPage(QWidget* parent = nullptr);
     ~ConfigPage();
 
+    //供主界面设置采集状态，禁止在采集中修改配置
+    void setAcquisitionRunning(bool isRunning);
+
 signals:
 	//发出工位数量变化信号，供 AcquisitionPage 接收并更新表格列数
     void stationCountChanged(int count);
@@ -78,5 +81,6 @@ private:
     QJsonArray m_colsAlarmLimit;  //报警阈值
 
     Ui::ConfigPageClass* ui;
+    bool m_isAcquisitionRunning = false; //采集状态标志位
 };
 
