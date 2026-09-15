@@ -120,16 +120,17 @@ void AcquisitionPage::initListViewModel(const QStringList& data)
     connect(ui->listView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &AcquisitionPage::onListViewSelectionChanged);
 }
 
-// 停止采集按钮响应
+//停止采集按钮响应
 void AcquisitionPage::on_stopCollectBtn_clicked()
 {
     //恢复按钮状态
     ui->startCollectBtn->setEnabled(true);
     ui->stopCollectBtn->setEnabled(false);
+	ui->readingIndicator->setStyleSheet("color: red; font-weight: bold;");
     ui->readingIndicator->setText("读取已停止");
 
     //通知网络层断开 TCP 连接、清空未处理的请求队列并安全退出子线程
-    //ModbusClient::instance()->stopWorking();
+    emit stopAcquisitionRequested();
 }
 
 //开始采集按钮响应
@@ -138,17 +139,11 @@ void AcquisitionPage::on_startCollectBtn_clicked()
     //切换按钮状态（UI 防抖与状态互斥）
     ui->startCollectBtn->setEnabled(false);
     ui->stopCollectBtn->setEnabled(true);
+	ui->readingIndicator->setStyleSheet("color: green; font-weight: bold;");
     ui->readingIndicator->setText("实时读取中...");
 
-    //从配置管理器拉取最新、完整的工位配置列表
-    QVector<StationConfig> stationConfigs = ConfigManager::instance()->getStationsConfig();
-
-	//testConfigManager(&stationConfigs);
-    //将工位参数传递给网络层，启动 Modbus 轮询子线程
-    // 注意：这里需要根据实际情况调整 ModbusClient 的使用方式
-    // 例如，可能需要传递 stationConfigs 到 ModbusClient 的某个方法中
-    // 这里只是一个示例
-    //ModbusClient::instance()->startWorking(stationConfigs);
+	//通知网络层建立 TCP 连接、启动子线程并开始数据采集
+    emit startAcquisitionRequested();
 }
 
 //处理ListView的选择变化事件，实现选中数量上限为4个
@@ -177,7 +172,7 @@ void AcquisitionPage::on_comboMotorStation_currentIndexChanged(int index)
     //提取下拉框内绑定的真实工位索引
     int stationIndex = ui->comboMotorStation->itemData(index).toInt();
 
-    //TODO: 根据 stationIndex 从底层多线程 Socket 缓存池中取出对应流量数据
+    //根据 stationIndex 从底层多线程 Socket 缓存池中取出对应流量数据
     double currentFlow = 0.00;
 
     ui->motorTraffic->setText(QString::number(currentFlow, 'f', 2));
@@ -288,13 +283,8 @@ void AcquisitionPage::updateStationCount(int count)
 //重载界面配置
 void AcquisitionPage::onConfigReloaded(int stationCount)
 {
-    // 1. 刷新界面 UI（更新站号下拉框选项、重绘监控表格的列数）
+    // 刷新界面 UI（更新站号下拉框选项、重绘监控表格的列数）
     updateStationCount(stationCount);
-
-    // 2. TODO: 后续从 ConfigManager 获取解析好的纯 C++ 结构体参数，交给 Modbus 轮询线程
-    // 示例思路：
-    // GlobalConfig currentConfig = ConfigManager::instance()->getGlobalConfig();
-    // emit restartModbusThreads(currentConfig);
 }
 
 //动态更新TableWidget表格列数与行数，并调用loadTableMetricInfoFromJson*()填充内容

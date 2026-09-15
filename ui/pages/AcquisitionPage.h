@@ -40,6 +40,10 @@ public:
     AcquisitionPage(QWidget* parent = nullptr);
     ~AcquisitionPage();
 
+signals:
+    void startAcquisitionRequested(); // 申请开始采集
+    void stopAcquisitionRequested();  // 申请停止采集
+
 public slots:
     //接收来自 ConfigPage 的工位数量更新信号，实现动态扩展
     void updateStationCount(int count);

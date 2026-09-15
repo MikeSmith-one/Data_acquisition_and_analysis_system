@@ -20,7 +20,7 @@ find_package(Qt${QT_VERSION_MAJOR}
         Sql
         Charts
         SerialBus
-        StateMachine
+        StateMachine 
 )
 
 qt_standard_project_setup()
@@ -56,8 +56,9 @@ set(PROJECT_SOURCES
     ui/pages/LogPage.ui
 
     #网络和数据库
-    network/ModbusClient.h
-    network/ModbusClient.cpp
+    network/ModbusManager.h
+    network/ModbusManager.cpp
+    network/StationData.h
     database/DatabaseManager.h
     database/DatabaseManager.cpp
 
@@ -89,6 +90,6 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Network
         Qt::Sql
         Qt::Charts
-        Qt6::SerialBus
-        Qt6::StateMachine
+        Qt::SerialBus
+        Qt::StateMachine
 )

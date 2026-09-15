@@ -9,6 +9,12 @@
     font-size: 20px;
 }
 
+#readingIndicator {
+    background-color: white;
+    color: black;
+    font-size: 20px;
+}
+
     #stopCollectBtn:hover {
         background-color: #8bbbe3;
     }

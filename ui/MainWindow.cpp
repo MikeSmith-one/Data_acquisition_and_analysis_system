@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include <QFile>
-#include "./pages/ConfigManager.h"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -57,11 +56,70 @@ MainWindow::MainWindow(QWidget *parent)
 //#ifdef QT_DEBUG
 //    testConfigManager();
 //#endif
+
+    //#####################################
+    //Modbus TCP通信子线程初始化
+    // ####################################
+    
+    //实例化核心组件
+    m_modbusThread = new QThread(this);
+    m_modbusManager = new ModbusManager(); // 注意：这里不能传 parent，否则无法 moveToThread
+
+    //移入子线程
+    m_modbusManager->moveToThread(m_modbusThread);
+
+    // 跨线程连接：AcquisitionPage -> ModbusManager
+    //
+    //当 AcquisitionPage 发出信号时，Qt 会通过 QueuedConnection 自动将请求投递到子线程事件循环中执行
+    connect(m_acquisitionPage, &AcquisitionPage::startAcquisitionRequested,
+        m_modbusManager, &ModbusManager::startAcquisition);
+
+    connect(m_acquisitionPage, &AcquisitionPage::stopAcquisitionRequested,
+        m_modbusManager, &ModbusManager::stopAcquisition);
+
+    //线程安全销毁连接
+    connect(m_modbusThread, &QThread::finished, m_modbusManager, &QObject::deleteLater);
+
+    //绑定 ConfigManager 的配置更新信号到 ModbusManager (跨线程自动排队)
+    // 
+    //假设 ConfigManager 增加了一个获取最新配置并发射的机制，或者直接在 MainWindow 桥接：
+    connect(ConfigManager::instance(), &ConfigManager::configUpdated, this, [=]() {
+        //当配置更新时，拉取最新配置并推给后台通信线程
+        QVector<StationConfig> configs = ConfigManager::instance()->getStationsConfig();
+        QMetaObject::invokeMethod(m_modbusManager, "applyConfigurations",//invokeMethod()函数跨线程调用，类似信号和槽
+            Qt::QueuedConnection,
+            Q_ARG(QVector<StationConfig>, configs));//传入参数(参数类型，参数)
+        });
+
+    //接收后台线程解析好的实时数据 (跨线程自动排队)
+    connect(m_modbusManager, &ModbusManager::stationDataReceived,
+        this, &MainWindow::onStationDataReceived);
+    
+    //测试用：打印接收到的工位数据到控制台
+    connect(m_modbusManager, &ModbusManager::stationDataReceived,
+        this, &MainWindow::debugPrintStationData);
+
+    //启动工作线程
+    m_modbusThread->start();
+
+    //触发首次配置加载
+    QMetaObject::invokeMethod(m_modbusManager, "applyConfigurations",
+        Qt::QueuedConnection,
+        Q_ARG(QVector<StationConfig>, ConfigManager::instance()->getStationsConfig()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+//槽函数
+void MainWindow::onStationDataReceived(const StationData& data)
+{
+    // TODO: 将接收到的工位实时数据分发给 AcquisitionPage 或其他 UI 界面
+    if (m_acquisitionPage) {
+        // m_acquisitionPage->updateStationData(data);
+    }
 }
 
 void MainWindow::initUI()
@@ -80,6 +138,31 @@ QString MainWindow::loadQss()
     }
 
     return file.readAll();
+}
+
+//测试函数：打印接收到的工位数据到控制台
+void MainWindow::debugPrintStationData(const StationData& data) {
+    // 使用 noquote() 去除 QString 打印时自带的双引号
+    qDebug().noquote() << QString("========== [工位 %1 实时数据] ==========").arg(data.stationId + 1);
+
+    if (!data.isOnline) {
+        qDebug().noquote() << "  状态: [离线 OFFLINE]";
+        qDebug().noquote() << "========================================";
+        return;
+    }
+
+    qDebug().noquote() << "  状态: [在线 ONLINE]";
+
+    // C++17 结构化绑定 + Qt6 asKeyValueRange() 遍历 QMap
+    for (auto [paramName, value] : data.values.asKeyValueRange()) {
+        // 使用 arg() 进行格式化对齐：
+        // %1, -15 表示左对齐，占 15 个字符宽度
+        // %2, 0, 'f', 2 表示浮点数，保留 2 位小数
+        qDebug().noquote() << QString("  %-15").arg(paramName + " :")
+            << QString::number(value, 'f', 2);
+    }
+
+    qDebug().noquote() << "========================================";
 }
 
 //ConfigManager 测试函数：读取配置文件并打印到控制台
