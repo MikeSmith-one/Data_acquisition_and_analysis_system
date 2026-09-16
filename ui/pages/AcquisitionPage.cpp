@@ -17,6 +17,8 @@ AcquisitionPage::AcquisitionPage(QWidget* parent)
 	//连接“提取模式”下拉框的信号槽实现动态更新右侧单位 Label 和输入框占位符
     connect(ui->comboBoxMode, QOverload<int>::of(&QComboBox::currentIndexChanged),
         this, &AcquisitionPage::onAcquisitionExtractionModeChanged);
+    //ConfigManager 测试函数：读取配置文件并打印到控制台
+	//testConfigManager();
 }
 
 AcquisitionPage::~AcquisitionPage()
@@ -346,10 +348,16 @@ void AcquisitionPage::updateTableColumns(int stationCount)
 
 //测试 ConfigManager 读取配置文件的函数，打印到控制台
 /*
-void AcquisitionPage::testConfigManager(QVector<StationConfig>* stationConfigs) {
+void AcquisitionPage::testConfigManager() {
     qDebug() << "========== 开始测试 ConfigManager 读取 ==========";
 
-    QVector<StationConfig> stations = *stationConfigs;
+    ConfigManager* manager = ConfigManager::instance();
+    // 确保此时已经执行过 loadConfigFromIni()
+
+    int count = manager->getStationCount();
+    qDebug() << "[全局配置] 工位总数:" << count;
+
+    QVector<StationConfig> stations = manager->getStationsConfig();
     if (stations.isEmpty()) {
         qDebug() << "警告: 未读取到任何工位配置，请检查 INI 路径或数据！";
         return;

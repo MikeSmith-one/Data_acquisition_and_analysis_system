@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	//ConfigManager 测试函数：读取配置文件并打印到控制台
 //#ifdef QT_DEBUG
-//    testConfigManager();
+    //testConfigManager();
 //#endif
 
     //#####################################
@@ -155,11 +155,13 @@ void MainWindow::debugPrintStationData(const StationData& data) {
 
     // C++17 结构化绑定 + Qt6 asKeyValueRange() 遍历 QMap
     for (auto [paramName, value] : data.values.asKeyValueRange()) {
-        // 使用 arg() 进行格式化对齐：
-        // %1, -15 表示左对齐，占 15 个字符宽度
-        // %2, 0, 'f', 2 表示浮点数，保留 2 位小数
-        qDebug().noquote() << QString("  %-15").arg(paramName + " :")
-            << QString::number(value, 'f', 2);
+        // %1 对应参数名，-15 表示左对齐占 15 个字符
+        // %2 对应数值，保留 2 位小数
+        QString line = QString("  %1 %2")
+            .arg(paramName + " :", -15)
+            .arg(value, 0, 'f', 2);
+
+        qDebug().noquote() << line;
     }
 
     qDebug().noquote() << "========================================";

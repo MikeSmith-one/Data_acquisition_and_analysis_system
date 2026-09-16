@@ -69,9 +69,9 @@ private slots:
 
 private:
     //ConfigManager 测试函数，读取配置文件并打印到控制台
-    //void testConfigManager(QVector<StationConfig>* stationConfigs);
+    //void testConfigManager();
 
-    //初始化界面
+    //初始化界面 
     void initUI();
     QString loadQss();
 

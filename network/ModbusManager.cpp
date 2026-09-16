@@ -61,6 +61,14 @@ void StationContext::startAcquisition() {
     if (m_isAcquiring) return;
     m_isAcquiring = true;
 
+    //防呆提示：如果发现没有配置任何寄存器，打印警告
+    if (m_holdingRegCount <= 0 && m_inputRegCount <= 0) {
+        QString warnMsg = QString("工位 %1 启动采集失败：未读取到任何有效的寄存器映射配置！请检查配置文件。").arg(m_config.stationId + 1);
+        emit logMessage(warnMsg);
+        qWarning() << warnMsg;
+        return; //直接返回，不发起连接
+    }
+
     if (m_state == Disconnected && (m_holdingRegCount > 0 || m_inputRegCount > 0)) {
         resetBackoff();
         changeState(Connecting);
@@ -94,6 +102,7 @@ void StationContext::resetBackoff() {
 
 void StationContext::onSocketConnected() {
     emit logMessage(QString("工位 %1 成功连接到 %2:%3").arg(m_config.stationId + 1).arg(m_config.ip).arg(m_config.port));
+	qDebug() << "Connected to" << m_config.ip << ":" << m_config.port;
     resetBackoff();
     changeState(Idle);
 
@@ -119,11 +128,13 @@ void StationContext::onSocketDisconnected() {
         //只有在“正在采集”期间发生的意外断线，才触发指数退避重连
         if (m_isAcquiring) {
             emit logMessage(QString("工位 %1 断开连接，%2 秒后重试...").arg(m_config.stationId + 1).arg(m_currentBackoff / 1000));
+			qDebug() << "Disconnected from" << m_config.ip << ":" << m_config.port << ", retrying in" << m_currentBackoff / 1000 << "seconds";
             m_reconnectTimer->start(m_currentBackoff);
             m_currentBackoff = qMin(m_currentBackoff * 2, 15000);//最大 15 秒
         }
         else {
             emit logMessage(QString("工位 %1 采集已停止，连接断开").arg(m_config.stationId + 1));
+			qDebug() << "Disconnected from" << m_config.ip << ":" << m_config.port << ", acquisition stopped";
         }
     }
 }
@@ -159,6 +170,7 @@ void StationContext::onPollTimeout() {
 
 void StationContext::onResponseTimeout() {
     emit logMessage(QString("工位 %1 响应超时，断开重连").arg(m_config.stationId + 1));
+	qDebug() << "Response timeout for station" << m_config.stationId + 1 << ", aborting connection for reconnection";
     m_socket->abort(); //超时直接断开，走指数退避重连逻辑
 }
 
@@ -304,6 +316,10 @@ void StationContext::parseModbusResponse(quint8 fc, const QByteArray& payload) {
 // ==========================================
 ModbusManager::ModbusManager(QObject* parent) : QObject(parent) {
     qRegisterMetaType<StationData>("StationData");
+
+    // 【新增】注册自定义类型，允许它们在跨线程队列中使用
+    //qRegisterMetaType<StationConfig>("StationConfig");
+    //qRegisterMetaType<QVector<StationConfig>>("QVector<StationConfig>");
 }
 
 ModbusManager::~ModbusManager() {
@@ -329,6 +345,7 @@ void ModbusManager::applyConfigurations(const QVector<StationConfig>& configs) {
     }
 
     emit logMessage(QString("Modbus 通信服务已加载 %1 个工位配置并启动").arg(configs.size()));
+	qDebug() << "Modbus communication service loaded" << configs.size() << "station configurations and started";
 }
 
 //开始采集槽函数
@@ -340,6 +357,7 @@ void ModbusManager::startAcquisition() {
         ctx->startAcquisition();
     }
     emit logMessage("系统已启动全局数据采集");
+	qDebug() << "Global data acquisition started";
 }
 
 //停止采集槽函数
@@ -351,6 +369,7 @@ void ModbusManager::stopAcquisition() {
         ctx->stopAcquisition();
     }
     emit logMessage("系统已停止全局数据采集");
+	qDebug() << "Global data acquisition stopped";
 }
 
 void ModbusManager::clearAllContexts() {
