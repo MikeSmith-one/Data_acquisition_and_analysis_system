@@ -251,12 +251,26 @@ void StationContext::onSocketReadyRead() {
         else {
             //不需要读 Input，本轮结束
             changeState(Idle);
+
+            //注入软测量逻辑：计算压降 ΔP
+            calculateSimulatedMetrics(m_currentData);
+
+            //在抛出数据前，立刻打上绝对时间戳！
+            m_currentData.timestamp = QDateTime::currentMSecsSinceEpoch();
+
             emit dataReady(m_currentData);
         }
     }
     else if (m_state == WaitingInputResponse) {
         //Input 读完了，本轮结束
         changeState(Idle);
+
+        //注入软测量逻辑：计算压降 ΔP
+        calculateSimulatedMetrics(m_currentData);
+
+        //在抛出数据前，立刻打上绝对时间戳！
+        m_currentData.timestamp = QDateTime::currentMSecsSinceEpoch();
+
         emit dataReady(m_currentData);
     }
 }
@@ -311,15 +325,35 @@ void StationContext::parseModbusResponse(quint8 fc, const QByteArray& payload) {
     }
 }
 
+//软测量计算函数：根据现有物理量推算Δ
+void StationContext::calculateSimulatedMetrics(StationData& data) {
+    //确保计算所需的基础数据存在
+    if (data.values.contains("flow") && data.values.contains("Tin") && data.values.contains("Tout")) {
+
+        double flow = data.values.value("flow");
+        double tin = data.values.value("Tin");
+        double tout = data.values.value("Tout");
+
+        //计算平均温度
+        double tavg = (tin + tout) / 2.0;
+
+        //流体力学经验公式计算压降 ΔP (单位: kPa)
+        //公式: ΔP = (0.8 * flow^2 + 1.2 * flow) * (1 - 0.002 * (Tavg - 20))
+        double deltaP = (0.8 * flow * flow + 1.2 * flow) * (1.0 - 0.002 * (tavg - 20.0));
+
+        //防止出现负数压降（比如流量为0时）
+        if (deltaP < 0) deltaP = 0.0;
+
+        //将计算结果强行塞入数据字典中
+        data.values.insert("ΔP", deltaP);
+    }
+}
+
 // ==========================================
 // ModbusManager 实现
 // ==========================================
 ModbusManager::ModbusManager(QObject* parent) : QObject(parent) {
     qRegisterMetaType<StationData>("StationData");
-
-    // 【新增】注册自定义类型，允许它们在跨线程队列中使用
-    //qRegisterMetaType<StationConfig>("StationConfig");
-    //qRegisterMetaType<QVector<StationConfig>>("QVector<StationConfig>");
 }
 
 ModbusManager::~ModbusManager() {
@@ -338,7 +372,7 @@ void ModbusManager::applyConfigurations(const QVector<StationConfig>& configs) {
 
         m_contexts.insert(config.stationId, ctx);
 
-        // 如果当前全局处于采集状态，新应用配置后应立即启动采集
+        //如果当前全局处于采集状态，新应用配置后应立即启动采集
         if (m_isGlobalAcquiring) {
             ctx->startAcquisition();
         }

@@ -47,11 +47,10 @@ private slots:
 
 private:
     void changeState(State newState);//状态改变函数
-    //void sendModbusRequest();
     void sendReadRequest(quint8 fc, int minAddr, int regCount);
-    //void parseModbusResponse(const QByteArray& response);//解析响应报文
-    void parseModbusResponse(quint8 fc, const QByteArray& response);
+    void parseModbusResponse(quint8 fc, const QByteArray& response);//解析响应报文
     void resetBackoff();//重置指数退避值
+    void calculateSimulatedMetrics(StationData& data);//声明软测量函数
 
 private:
     StationConfig m_config;
@@ -84,21 +83,21 @@ public:
     ~ModbusManager();
 
 public slots:
-    // 接收动态配置并重建通信上下文 (由主线程调用，Qt会自动排队到子线程执行)
+    //接收动态配置并重建通信上下文 (由主线程调用，Qt会自动排队到子线程执行)
     void applyConfigurations(const QVector<StationConfig>& configs);
 
-    // 新增：对外暴露的启停槽函数 (供 UI 按钮调用)
+    //对外暴露的启停槽函数 (供 UI 按钮调用)
     void startAcquisition();
     void stopAcquisition();
 
 signals:
-    // 无状态数据分发
+    //无状态数据分发
     void stationDataReceived(const StationData& data);
-    // 日志分发
+    //日志分发
     void logMessage(const QString& msg);
 
 private:
-    // 停止所有通信
+    //停止所有通信
     void clearAllContexts();
 
 private:

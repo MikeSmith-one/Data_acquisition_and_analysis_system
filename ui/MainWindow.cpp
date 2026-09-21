@@ -57,9 +57,9 @@ MainWindow::MainWindow(QWidget *parent)
     //testConfigManager();
 //#endif
 
-    //#####################################
-    //Modbus TCP通信子线程初始化
-    // ####################################
+    // ====================================
+    // Modbus TCP通信子线程初始化
+	// ====================================
     
     //实例化核心组件
     m_modbusThread = new QThread(this);
@@ -116,9 +116,11 @@ MainWindow::~MainWindow()
 //槽函数
 void MainWindow::onStationDataReceived(const StationData& data)
 {
-    // TODO: 将接收到的工位实时数据分发给 AcquisitionPage 或其他 UI 界面
+    //将接收到的工位实时数据分发给 AcquisitionPage 或其他 UI 界面
     if (m_acquisitionPage) {
-        // m_acquisitionPage->updateStationData(data);
+
+        //调用 AcquisitionPage 的接收函数
+        m_acquisitionPage->updateStationData(data);
     }
 }
 
