@@ -37,10 +37,6 @@ public:
     //供主界面设置采集状态，禁止在采集中修改配置
     void setAcquisitionRunning(bool isRunning);
 
-signals:
-	//发出工位数量变化信号，供 AcquisitionPage 接收并更新表格列数
-    void stationCountChanged(int count);
-
 public slots:
 	//更新本页面的工位数量下拉框和表格列数
 	void updateStationCount(int count);
@@ -60,6 +56,12 @@ private slots:
 
     //选择新的配置文件 (顶栏 ToolButton)
     void on_toolButton_2_clicked();
+
+    //设置数据存储路径，“数据存储位置”旁边的按钮
+    void on_toolButton_3_clicked();
+
+    //设置日志存储路径，“日志存储位置”蓬勃的按钮
+    void on_toolButton_clicked();
 private:
 	//初始化界面
     void initUI();
@@ -74,6 +76,9 @@ private:
 
 	//加载指定工位的配置数据到界面
     void loadStationData(int index);
+
+    //专门用于加载右下角“全局数据存储与日志”面板的静态配置
+    void loadGlobalConfig();
 
     //各个表格的列结构缓存
     QJsonArray m_colsDataMapping; //数据点映射

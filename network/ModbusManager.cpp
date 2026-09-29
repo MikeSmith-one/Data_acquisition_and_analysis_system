@@ -258,6 +258,9 @@ void StationContext::onSocketReadyRead() {
             //在抛出数据前，立刻打上绝对时间戳！
             m_currentData.timestamp = QDateTime::currentMSecsSinceEpoch();
 
+            //在抛出数据前，进行报警检测
+            checkAlarms(m_currentData);
+
             emit dataReady(m_currentData);
         }
     }
@@ -270,6 +273,9 @@ void StationContext::onSocketReadyRead() {
 
         //在抛出数据前，立刻打上绝对时间戳！
         m_currentData.timestamp = QDateTime::currentMSecsSinceEpoch();
+
+        //在抛出数据前，进行报警检测
+        checkAlarms(m_currentData);
 
         emit dataReady(m_currentData);
     }
@@ -349,11 +355,73 @@ void StationContext::calculateSimulatedMetrics(StationData& data) {
     }
 }
 
+//报警检测与防抖逻辑
+void StationContext::checkAlarms(const StationData& data)
+{
+    //遍历当前解析出的所有物理量
+    for (auto it = data.values.begin(); it != data.values.end(); ++it) {
+        QString paramName = it.key();
+        double value = it.value();
+
+        //检查该参数是否配置了报警阈值
+        if (!m_config.alarmLimits.contains(paramName)) continue;
+
+        const AlarmLimit& limit = m_config.alarmLimits[paramName];
+        bool isAlarmingNow = false;
+        bool isUpper = true;
+        double triggeredLimit = 0.0;
+
+        //判断是否越限
+        if (value > limit.upperLimit) {
+            isAlarmingNow = true;
+            isUpper = true;
+            triggeredLimit = limit.upperLimit;
+        }
+        else if (value < limit.lowerLimit) {
+            isAlarmingNow = true;
+            isUpper = false;
+            triggeredLimit = limit.lowerLimit;
+        }
+
+        //防抖逻辑：只有状态发生变化时才处理
+        bool wasAlarming = m_alarmStates.value(paramName, false);
+
+        if (isAlarmingNow && !wasAlarming) {
+            //正常 -> 异常：触发报警！
+            m_alarmStates[paramName] = true;
+
+            AlarmInfo info;
+            info.stationId = m_config.stationId;
+            info.paramName = paramName;
+            info.currentValue = value;
+            info.limitValue = triggeredLimit;
+            info.isUpperLimit = isUpper;
+
+            emit alarmTriggered(info);
+
+            //同时记录一条日志
+            QString logStr = QString("报警触发！工位 %1 [%2] 当前值: %3, %4阈值: %5")
+                .arg(info.stationId + 1).arg(info.paramName)
+                .arg(info.currentValue).arg(info.isUpperLimit ? "上限" : "下限").arg(info.limitValue);
+            emit logMessage(logStr);
+        }
+        else if (!isAlarmingNow && wasAlarming) {
+            //异常 -> 正常：解除报警状态 (静默解除，不弹窗，只改状态)
+            m_alarmStates[paramName] = false;
+
+            QString logStr = QString("报警解除。工位 %1 [%2] 恢复正常: %3").arg(m_config.stationId + 1).arg(paramName).arg(value);
+            emit logMessage(logStr);
+        }
+    }
+}
+
 // ==========================================
 // ModbusManager 实现
 // ==========================================
 ModbusManager::ModbusManager(QObject* parent) : QObject(parent) {
     qRegisterMetaType<StationData>("StationData");
+    //注册报警类型
+    qRegisterMetaType<AlarmInfo>("AlarmInfo");
 }
 
 ModbusManager::~ModbusManager() {
@@ -369,6 +437,7 @@ void ModbusManager::applyConfigurations(const QVector<StationConfig>& configs) {
         //转发内部信号到外部
         connect(ctx, &StationContext::dataReady, this, &ModbusManager::stationDataReceived);
         connect(ctx, &StationContext::logMessage, this, &ModbusManager::logMessage);
+        connect(ctx, &StationContext::alarmTriggered, this, &ModbusManager::alarmTriggered);
 
         m_contexts.insert(config.stationId, ctx);
 

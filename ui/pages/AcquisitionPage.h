@@ -27,6 +27,9 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDir>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AcquisitionPageClass; };
@@ -45,6 +48,10 @@ struct MetricInfo1 {
 
 //前向声明
 class QStringListModel;
+
+// =========================================================
+// 用于QChart的数据结构体
+// =========================================================
 
 //插槽结构体，用于管理每个图表的状态和数据
 struct ChartSlot {
@@ -99,6 +106,7 @@ private slots:
     //定时刷新图表的槽函数
     void onRenderTimerTimeout();
 
+
 	//图表区域左侧按钮，隐藏或显示左侧面板
 	void on_leftBtn_clicked();
 
@@ -114,6 +122,12 @@ private slots:
 
     //顶部工具栏“清理缓存”按钮槽函数
     void on_cleanBtn_clicked();
+
+    //顶部工具栏“...”按钮槽函数 (选择数据库存储目录)
+    void on_toolButton_clicked();
+
+    //顶部工具栏“打开”按钮槽函数 (打开数据库存储目录)
+    void on_openBtn_clicked();
 private:
     //ConfigManager 测试函数，读取配置文件并打印到控制台
     //void testConfigManager();
@@ -129,7 +143,13 @@ private:
     void freeChartSlot(const QString& metricId);
     void updateSeriesForStationCount(ChartSlot& slot); //根据工位数量动态增删曲线
 
+    //刷新表格列的内部封装函数
+    void updateTableColumns(int stationCount);
 
+    //加载数据到“提取模式”的combboBox中
+    void loadAcquisitionExtractionModesFromJson();
+
+private:
     //加载数据到ListView
     QList<MetricInfo1> loadMetricInfoFromJson();
     void initListViewModel(const QStringList& data);
@@ -137,15 +157,10 @@ private:
     //加载数据到TableWidget
     QList<MetricInfo1> loadTableMetricInfoFromJson();
 
+private:
 	bool leftDockisShow = true; //用于控制左侧面板的显示与隐藏
 
 	bool rightDockisShow = true; //用于控制右侧面板的显示与隐藏
-
-    //刷新表格列的内部封装函数
-    void updateTableColumns(int stationCount);
-
-	//加载数据到“提取模式”的combboBox中
-    void loadAcquisitionExtractionModesFromJson();
 
     Ui::AcquisitionPageClass* ui;
     QPointer<QStringListModel> m_listViewModel;

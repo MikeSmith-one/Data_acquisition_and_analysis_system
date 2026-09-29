@@ -10,9 +10,9 @@
 #include <QSet>
 #include <QDebug>
 
-// #########################################################
+// =========================================================
 // 数据结构定义
-// #########################################################
+// =========================================================
 
 //报警阈值结构体
 struct AlarmLimit {
@@ -40,9 +40,9 @@ struct StationConfig {
     QMap<QString, AlarmLimit> alarmLimits;  // 报警阈值字典 (Key: 参数名, Value: 上下限)
 };
 
-// #########################################################
+// =========================================================
 // ConfigManager：全局线程安全配置单例类 (Header-Only)
-// #########################################################
+// =========================================================
 class ConfigManager : public QObject {
     Q_OBJECT
 
@@ -83,6 +83,7 @@ public:
 		//读取全局工位数量
         QSettings settings(m_iniPath, QSettings::IniFormat);
         int count = settings.value("Global/StationCount", 0).toInt();
+
 		//读取每个工位的配置
         for (int i = 0; i < count; ++i) {
             StationConfig station;

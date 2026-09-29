@@ -40,6 +40,9 @@ void ConfigPage::initUI()
 
     //初始化完成后，将配置文件载入 ConfigManager 内存
     ConfigManager::instance()->loadConfigFromIni();
+
+    //初始化最后，加载右下角的全局配置到控件中
+    loadGlobalConfig();
 }
 
 QString ConfigPage::loadQss()
@@ -126,9 +129,13 @@ void ConfigPage::on_globalSaveBtn_clicked()
     //写入全局变量至 INI 文件
     settings.setValue("Global/StationCount", newCount);
     settings.setValue("Global/SavePeriod", ui->dataSavePeriod->currentText());
-    settings.setValue("Global/SaveLocation", ui->saveLocation->text());
-    settings.setValue("Global/AutoClean", ui->switchAutoClean->isChecked());
-    settings.setValue("Global/LogRetainDays", ui->saveDates->value());
+    settings.setValue("Global/LogSaveLocation", ui->saveLocation->text());
+    settings.setValue("Global/DatabaseLocation", ui->DatabaseLocation->text());
+    settings.setValue("Global/AutoCleanLog", ui->switchAutoCleanLog->isChecked());
+    settings.setValue("Global/LogRetainDays", ui->logSaveDates->value());
+    settings.setValue("Global/AutoCleanDB", ui->switchAutoCleanDB->isChecked());
+    settings.setValue("Global/dbRetainDays", ui->dbSaveDates->value());
+
     settings.sync();
 
     //全局保存后，同步刷新内存数据
@@ -181,6 +188,44 @@ void ConfigPage::on_toolButton_2_clicked()
         ui->stationNum->setValue(count);
         updateStationCount(count);
         loadStationData(0);
+    }
+}
+
+//选择数据库存储位置
+void ConfigPage::on_toolButton_3_clicked()
+{
+    // 防呆：采集中不允许修改配置
+    if (m_isAcquisitionRunning) {
+        QMessageBox::warning(this, "警告", "正在采集中，无法更改存储位置！");
+        return;
+    }
+
+    QString currentPath = ui->DatabaseLocation->text();
+    QString dir = QFileDialog::getExistingDirectory(this, "选择数据库存储目录", currentPath,
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+    if (!dir.isEmpty()) {
+        //仅更新 UI 显示，点击“全局保存”按钮写入 INI
+        ui->DatabaseLocation->setText(dir);
+    }
+}
+
+//选择数据库存储位置
+void ConfigPage::on_toolButton_clicked()
+{
+    // 防呆：采集中不允许修改配置
+    if (m_isAcquisitionRunning) {
+        QMessageBox::warning(this, "警告", "正在采集中，无法更改存储位置！");
+        return;
+    }
+
+    QString currentPath = ui->saveLocation->text();
+    QString dir = QFileDialog::getExistingDirectory(this, "选择日志存储目录", currentPath,
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+    if (!dir.isEmpty()) {
+        //仅更新 UI 显示，点击“全局保存”按钮写入 INI
+        ui->saveLocation->setText(dir);
     }
 }
 
@@ -332,6 +377,45 @@ void ConfigPage::saveTableToIni(QTableWidget* table, const QJsonArray& colCache,
         }
     }
     settings.sync();
+}
+
+//加载全局静态配置 (数据存储与日志面板)
+void ConfigPage::loadGlobalConfig()
+{
+    //获取INI文件路径并打开 Settings
+    QString iniPath = ConfigManager::instance()->getIniPath();
+    QSettings settings(iniPath, QSettings::IniFormat);
+
+    //读取并设置：数据保存周期 (带默认值 "1s")
+    QString savePeriod = settings.value("Global/SavePeriod", "1s").toString();
+    ui->dataSavePeriod->setCurrentText(savePeriod);
+
+    //读取并设置：数据库存储位置
+    QString dbLoc = settings.value("Global/DatabaseLocation", "").toString();
+    if (dbLoc.isEmpty()) {
+        dbLoc = QCoreApplication::applicationDirPath() + "/database";
+    }
+    ui->DatabaseLocation->setText(dbLoc);
+
+    //读取并设置：日志存储位置
+    QString logLoc = settings.value("Global/LogSaveLocation", "").toString();
+    if (logLoc.isEmpty()) {
+        logLoc = QCoreApplication::applicationDirPath() + "/Logs";
+    }
+    ui->saveLocation->setText(logLoc);
+
+
+    //读取并设置：数据库清理配置 (带默认值 false 和 180天)
+    bool autoCleanDB = settings.value("Global/AutoCleanDB", false).toBool();
+    int dbRetainDays = settings.value("Global/dbRetainDays", 180).toInt();
+    ui->switchAutoCleanDB->setChecked(autoCleanDB);
+    ui->dbSaveDates->setValue(dbRetainDays);
+
+    //读取并设置：日志清理配置 (带默认值 false 和 30天)
+    bool autoCleanLog = settings.value("Global/AutoCleanLog", false).toBool();
+    int logRetainDays = settings.value("Global/LogRetainDays", 30).toInt();
+    ui->switchAutoCleanLog->setChecked(autoCleanLog);
+    ui->logSaveDates->setValue(logRetainDays);
 }
 
 void ConfigPage::setAcquisitionRunning(bool isRunning)

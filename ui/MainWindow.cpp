@@ -95,6 +95,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_modbusManager, &ModbusManager::stationDataReceived,
         this, &MainWindow::onStationDataReceived);
     
+    //接收后台报警信号 (跨线程自动排队)
+    connect(m_modbusManager, &ModbusManager::alarmTriggered,
+        this, &MainWindow::onAlarmTriggered);
+
     //测试用：打印接收到的工位数据到控制台
     connect(m_modbusManager, &ModbusManager::stationDataReceived,
         this, &MainWindow::debugPrintStationData);
@@ -106,6 +110,33 @@ MainWindow::MainWindow(QWidget *parent)
     QMetaObject::invokeMethod(m_modbusManager, "applyConfigurations",
         Qt::QueuedConnection,
         Q_ARG(QVector<StationConfig>, ConfigManager::instance()->getStationsConfig()));
+
+    // ====================================
+    // DatabaseManager 数据库子线程初始化
+    // ====================================
+    m_dbThread = new QThread(this);
+    m_dbManager = new DatabaseManager();
+    m_dbManager->moveToThread(m_dbThread);
+
+    //线程安全销毁连接
+    connect(m_dbThread, &QThread::finished, m_dbManager, &QObject::deleteLater);
+
+    //接收底层数据：ModbusManager -> DatabaseManager
+    connect(m_modbusManager, &ModbusManager::stationDataReceived,
+        m_dbManager, &DatabaseManager::receiveData, Qt::QueuedConnection);
+
+    //启停控制：AcquisitionPage -> DatabaseManager
+    //直接在 MainWindow 里拦截 startAcquisitionRequested 信号，获取当前时间发给 DB
+    connect(m_acquisitionPage, &AcquisitionPage::startAcquisitionRequested, this, [=]() {
+        qint64 startTime = QDateTime::currentMSecsSinceEpoch();
+        QMetaObject::invokeMethod(m_dbManager, "startRecording", Qt::QueuedConnection, Q_ARG(qint64, startTime));
+        });
+
+    connect(m_acquisitionPage, &AcquisitionPage::stopAcquisitionRequested,
+        m_dbManager, &DatabaseManager::stopRecording, Qt::QueuedConnection);
+
+    //启动数据库线程
+    m_dbThread->start();
 }
 
 MainWindow::~MainWindow()
@@ -144,7 +175,7 @@ QString MainWindow::loadQss()
 
 //测试函数：打印接收到的工位数据到控制台
 void MainWindow::debugPrintStationData(const StationData& data) {
-    // 使用 noquote() 去除 QString 打印时自带的双引号
+    //使用 noquote() 去除 QString 打印时自带的双引号
     qDebug().noquote() << QString("========== [工位 %1 实时数据] ==========").arg(data.stationId + 1);
 
     if (!data.isOnline) {
@@ -155,10 +186,10 @@ void MainWindow::debugPrintStationData(const StationData& data) {
 
     qDebug().noquote() << "  状态: [在线 ONLINE]";
 
-    // C++17 结构化绑定 + Qt6 asKeyValueRange() 遍历 QMap
+    //C++17 结构化绑定 + Qt6 asKeyValueRange() 遍历 QMap
     for (auto [paramName, value] : data.values.asKeyValueRange()) {
-        // %1 对应参数名，-15 表示左对齐占 15 个字符
-        // %2 对应数值，保留 2 位小数
+        //%1对应参数名，-15 表示左对齐占 15 个字符
+        //%2对应数值，保留 2 位小数
         QString line = QString("  %1 %2")
             .arg(paramName + " :", -15)
             .arg(value, 0, 'f', 2);
@@ -167,6 +198,49 @@ void MainWindow::debugPrintStationData(const StationData& data) {
     }
 
     qDebug().noquote() << "========================================";
+}
+
+// =====================================================================
+// 全局报警响应逻辑 (非模态合并弹窗)
+// =====================================================================
+void MainWindow::onAlarmTriggered(const AlarmInfo& info)
+{
+    //组装单条报警信息文本
+    QString alarmType = info.isUpperLimit ? "超上限" : "超下限";
+    QString newMsg = QString("🔴 工位 %1 | 参数: %2 | 当前值: %3 | %4 (阈值: %5)")
+        .arg(info.stationId + 1)
+        .arg(info.paramName)
+        .arg(QString::number(info.currentValue, 'f', 2))
+        .arg(alarmType)
+        .arg(QString::number(info.limitValue, 'f', 2));
+
+    //如果弹窗不存在，或者已经被用户关闭了，就重新创建一个
+    if (!m_alarmBox) {
+        m_alarmBox = new QMessageBox(this);
+        m_alarmBox->setIcon(QMessageBox::Critical);
+        m_alarmBox->setWindowTitle("系统全局报警");
+        m_alarmBox->setStandardButtons(QMessageBox::Ok);
+
+        //当用户点击确定关闭弹窗时，销毁对象并置空指针
+        connect(m_alarmBox, &QMessageBox::finished, this, [=]() {
+            m_alarmBox->deleteLater();
+            m_alarmBox = nullptr;
+            });
+
+        m_alarmBox->setText("检测到以下数据异常，请立即检查：\n\n" + newMsg);
+
+        //使用 show() 而不是 exec()，保证是非模态，绝对不阻塞后台采集和图表刷新
+        m_alarmBox->show();
+    }
+    else {
+        //如果弹窗已经存在 (说明之前有别的报警还没关)，就把新报警追加到文本后面
+        QString currentText = m_alarmBox->text();
+        currentText += "\n" + newMsg;
+        m_alarmBox->setText(currentText);
+
+        //确保证弹窗在最上层闪烁一下，提醒用户有新报警加入
+        m_alarmBox->activateWindow();
+    }
 }
 
 //ConfigManager 测试函数：读取配置文件并打印到控制台

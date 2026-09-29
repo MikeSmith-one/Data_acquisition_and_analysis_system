@@ -36,7 +36,6 @@ AcquisitionPage::~AcquisitionPage()
     delete ui;
 }
 
-
 // =====================================================================
 // 界面整体的初始化操作
 // =====================================================================
@@ -57,6 +56,17 @@ void AcquisitionPage::initUI()
     //设置qss样式表
     QString qss = loadQss();
     this->setStyleSheet(qss);
+
+    //读取专门的数据库存储路径 (DatabaseLocation)
+    QString iniPath = ConfigManager::instance()->getIniPath();
+    QSettings settings(iniPath, QSettings::IniFormat);
+    QString dbLocation = settings.value("Global/DatabaseLocation", "").toString();
+
+    //如果 INI 中没有记录，则使用默认的 database 文件夹
+    if (dbLocation.isEmpty()) {
+        dbLocation = QCoreApplication::applicationDirPath() + "/database";
+    }
+    ui->storageLocationEdit->setText(dbLocation);
 }
 
 //从json加载qss样式表
@@ -176,6 +186,46 @@ void AcquisitionPage::on_startCollectBtn_clicked()
 
 	//通知网络层建立 TCP 连接、启动子线程并开始数据采集
     emit startAcquisitionRequested();
+}
+
+void AcquisitionPage::on_toolButton_clicked()
+{
+    //防呆：采集中不允许修改路径
+    if (m_isAcquiring) {
+        QMessageBox::warning(this, "警告", "正在采集中，无法更改存储位置！");
+        return;
+    }
+
+    QString currentPath = ui->storageLocationEdit->text();
+    QString dir = QFileDialog::getExistingDirectory(this, "选择数据库存储目录", currentPath,
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+    if (!dir.isEmpty()) {
+        ui->storageLocationEdit->setText(dir);
+
+        //同步保存到全局 INI 配置文件中的专门字段 (DatabaseLocation)
+        QString iniPath = ConfigManager::instance()->getIniPath();
+        QSettings settings(iniPath, QSettings::IniFormat);
+        settings.setValue("Global/DatabaseLocation", dir);
+        settings.sync();
+    }
+}
+
+void AcquisitionPage::on_openBtn_clicked()
+{
+    QString path = ui->storageLocationEdit->text();
+    QDir dir(path);
+
+    // 如果目录不存在，尝试创建它
+    if (!dir.exists()) {
+        if (!dir.mkpath(path)) {
+            QMessageBox::critical(this, "错误", "目录不存在且无法创建！\n" + path);
+            return;
+        }
+    }
+
+    // 调用系统资源管理器打开该目录
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
 //隐藏和显示左侧面板的槽函数

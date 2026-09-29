@@ -31,8 +31,9 @@ public:
     void stopAcquisition();
 
 signals:
-    void dataReady(const StationData& data);
-    void logMessage(const QString& msg);
+    void dataReady(const StationData& data);    //读取响应信号
+    void logMessage(const QString& msg);        //日志信息信号
+    void alarmTriggered(const AlarmInfo& info); //报警信号
 
 private slots:
     void onSocketConnected();
@@ -47,10 +48,11 @@ private slots:
 
 private:
     void changeState(State newState);//状态改变函数
-    void sendReadRequest(quint8 fc, int minAddr, int regCount);
+    void sendReadRequest(quint8 fc, int minAddr, int regCount);//发送读报文请求函数
     void parseModbusResponse(quint8 fc, const QByteArray& response);//解析响应报文
     void resetBackoff();//重置指数退避值
     void calculateSimulatedMetrics(StationData& data);//声明软测量函数
+    void checkAlarms(const StationData& data);//报警检测函数
 
 private:
     StationConfig m_config;
@@ -71,6 +73,9 @@ private:
 
     //用于暂存当前轮询周期内解析的数据，等所有请求完成后统一发出
     StationData m_currentData;
+
+    //防抖状态字典 (Key: 参数名, Value: 当前是否处于报警状态)
+    QMap<QString, bool> m_alarmStates;
 };
 
 // ==========================================
@@ -95,6 +100,8 @@ signals:
     void stationDataReceived(const StationData& data);
     //日志分发
     void logMessage(const QString& msg);
+    //全局转发报警信号
+    void alarmTriggered(const AlarmInfo& info);
 
 private:
     //停止所有通信

@@ -206,6 +206,19 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QPushButton" name="outputData_btn">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>导出数据</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
@@ -220,6 +233,19 @@
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QPushButton" name="filterData_btn">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>筛选数据</string>
             </property>
            </widget>
           </item>
@@ -262,6 +288,16 @@
               <item>
                <property name="text">
                 <string>全周期</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>末端稳态</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>自定义区间</string>
                </property>
               </item>
              </widget>
@@ -364,6 +400,19 @@
            </layout>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="applyDiyTimeBtn">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>确定</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
