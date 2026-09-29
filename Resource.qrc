@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>Resource/uiData/analysisExtractionModes.json</file>
         <file>Resource/uiData/listView1Data.json</file>
-        <file>Resource/uiData/listView2Data.json</file>
         <file>Resource/uiData/tableWidget1Data.json</file>
         <file>Resource/uiData/tableWidget2Data.json</file>
         <file>Resource/qss/AcquisitionPage.css</file>
