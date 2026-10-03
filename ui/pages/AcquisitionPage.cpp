@@ -28,7 +28,9 @@ AcquisitionPage::AcquisitionPage(QWidget* parent)
     connect(ui->comboBoxMode, QOverload<int>::of(&QComboBox::currentIndexChanged),
         this, &AcquisitionPage::onAcquisitionExtractionModeChanged);
     //ConfigManager 测试函数：读取配置文件并打印到控制台
-	//testConfigManager();
+    //#ifdef QT_DEBUG
+        //testConfigManager();
+    //#endif
 }
 
 AcquisitionPage::~AcquisitionPage()
@@ -76,6 +78,8 @@ QString AcquisitionPage::loadQss()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "打开文件失败!";
+
+        emit logMessage("打开文件失败!");
         return "";
     }
 
@@ -91,6 +95,8 @@ QList<MetricInfo1> AcquisitionPage::loadMetricInfoFromJson()
     QFile file(":/Resource/uiData/listView1Data.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "无法打开 JSON 文件!";
+
+        emit logMessage("无法打开 JSON 文件!");
         return metricList;
     }
 
@@ -160,6 +166,8 @@ void AcquisitionPage::on_stopCollectBtn_clicked()
 
     //通知网络层断开 TCP 连接、清空未处理的请求队列并安全退出子线程
     emit stopAcquisitionRequested();
+
+    emit logMessage("数据采集停止");
 }
 
 //开始采集按钮响应
@@ -186,6 +194,8 @@ void AcquisitionPage::on_startCollectBtn_clicked()
 
 	//通知网络层建立 TCP 连接、启动子线程并开始数据采集
     emit startAcquisitionRequested();
+
+    emit logMessage("数据采集开始");
 }
 
 void AcquisitionPage::on_toolButton_clicked()
@@ -193,6 +203,8 @@ void AcquisitionPage::on_toolButton_clicked()
     //防呆：采集中不允许修改路径
     if (m_isAcquiring) {
         QMessageBox::warning(this, "警告", "正在采集中，无法更改存储位置！");
+
+        emit logMessage("警告,正在采集中，无法更改存储位置！");
         return;
     }
 
@@ -216,15 +228,17 @@ void AcquisitionPage::on_openBtn_clicked()
     QString path = ui->storageLocationEdit->text();
     QDir dir(path);
 
-    // 如果目录不存在，尝试创建它
+    //如果目录不存在，尝试创建它
     if (!dir.exists()) {
         if (!dir.mkpath(path)) {
             QMessageBox::critical(this, "错误", "目录不存在且无法创建！\n" + path);
+
+            emit logMessage("错误,目录不存在且无法创建！");
             return;
         }
     }
 
-    // 调用系统资源管理器打开该目录
+    //调用系统资源管理器打开该目录
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
@@ -317,6 +331,8 @@ void AcquisitionPage::loadAcquisitionExtractionModesFromJson()
     QFile file(":/Resource/uiData/acquisitionExtractionModes.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "无法打开 acquisitionExtractionModes.json";
+
+        emit logMessage("打开 acquisitionExtractionModes.json 失败");
         return;
     }
 
@@ -325,6 +341,8 @@ void AcquisitionPage::loadAcquisitionExtractionModesFromJson()
 
     if (!doc.isObject()) {
         qWarning() << "acquisitionExtractionModes.json 格式不正确";
+
+        emit logMessage("acquisitionExtractionModes.json 格式错误");
         return;
     }
 
@@ -368,6 +386,8 @@ QList<MetricInfo1> AcquisitionPage::loadTableMetricInfoFromJson()
     QFile file(":/Resource/uiData/tableWidget1Data.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "无法打开 tableWidget1Data.json 文件!";
+
+        emit logMessage("警告！无法打开 tableWidget1Data.json 文件!");
         return metricList;
     }
 
@@ -865,6 +885,8 @@ void AcquisitionPage::on_cleanBtn_clicked()
     }
 
     QMessageBox::information(this, "清理完成", "内存缓存已成功清理！");
+
+    emit logMessage("清理完成,内存缓存已成功清理！");
 }
 
 // =====================================================================
@@ -876,6 +898,8 @@ void AcquisitionPage::on_outputBtn_clicked()
     if (ui->tableWidget->rowCount() == 0 ||
         (ui->tableWidget->item(0, 1) && ui->tableWidget->item(0, 1)->text() == "--")) {
         QMessageBox::warning(this, "导出失败", "当前表格中没有有效数据，请先点击【提取数据】！");
+
+        emit logMessage("导出失败,当前表格中没有有效数据");
         return;
     }
 
@@ -895,6 +919,8 @@ void AcquisitionPage::on_outputBtn_clicked()
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "导出失败", "无法创建文件，请检查目录权限：\n" + fileName);
+
+        emit logMessage("右侧提取面板数据导出失败！");
         return;
     }
 
@@ -941,6 +967,8 @@ void AcquisitionPage::on_outputBtn_clicked()
 
     //弹窗提示成功，并告知具体路径
     QMessageBox::information(this, "导出成功", "数据已成功导出至：\n" + fileName);
+
+    emit logMessage(QString("导出数据成功_%1").arg(modeText));
 }
 
 //测试 ConfigManager 读取配置文件的函数，打印到控制台

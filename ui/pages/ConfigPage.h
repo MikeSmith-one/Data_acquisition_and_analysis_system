@@ -37,6 +37,9 @@ public:
     //供主界面设置采集状态，禁止在采集中修改配置
     void setAcquisitionRunning(bool isRunning);
 
+signals:
+    void logMessage(const QString& msg);  //日志信息信号
+
 public slots:
 	//更新本页面的工位数量下拉框和表格列数
 	void updateStationCount(int count);

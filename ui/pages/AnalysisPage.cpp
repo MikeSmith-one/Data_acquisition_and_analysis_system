@@ -94,11 +94,11 @@ void AnalysisPage::on_timeModelBox_currentIndexChanged(int index)
 }
 
 
-//空槽函数 (防止编译报错，后续做导出时会用到)：
+//空槽函数
 void AnalysisPage::onListViewItemChanged(QStandardItem* item)
 {
     Q_UNUSED(item);
-    // 预留：当用户打勾/取消打勾时，可以在这里记录选中的文件列表
+    //当用户打勾/取消打勾时，可以在这里记录选中的文件列表
 }
 
 //从json加载qss样式表
@@ -108,6 +108,8 @@ QString AnalysisPage::loadQss()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qWarning() << "文件打开失败";
+
+        emit logMessage("文件打开失败");
         return"";
     }
 
@@ -156,6 +158,8 @@ void AnalysisPage::on_openSourceBtn_clicked()
 
     if (!dir.exists()) {
         QMessageBox::warning(this, "提示", "该目录不存在！\n" + path);
+
+        emit logMessage("该目录不存在,打开资源文件失败");
         return;
     }
 
@@ -192,6 +196,8 @@ void AnalysisPage::on_cleanBtn_clicked()
     }
 
     QMessageBox::information(this, "清理完成", "界面数据已重置！");
+
+    emit logMessage("清理完成,界面数据已重置！");
 }
 
 void AnalysisPage::on_outputReportBtn_clicked()
@@ -200,6 +206,8 @@ void AnalysisPage::on_outputReportBtn_clicked()
     if (ui->tableWidget->rowCount() == 0 ||
         (ui->tableWidget->item(0, 1) && ui->tableWidget->item(0, 1)->text() == "--")) {
         QMessageBox::warning(this, "导出失败", "当前没有有效数据，请先点击【生成摘要】！");
+
+        emit logMessage("导出数据失败");
         return;
     }
 
@@ -212,6 +220,8 @@ void AnalysisPage::on_outputReportBtn_clicked()
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "导出失败", "无法创建文件！");
+
+        emit logMessage("导出失败,无法创建文件！");
         return;
     }
 
@@ -262,6 +272,8 @@ void AnalysisPage::on_outputReportBtn_clicked()
 
     file.close();
     QMessageBox::information(this, "导出成功", "分析报告已成功导出为 TXT 文件！");
+
+    emit logMessage("导出成功,分析报告已成功导出为 TXT 文件！");
 }
 
 // =========================================
@@ -342,6 +354,8 @@ void AnalysisPage::loadAnalysisExtractionModesFromJson()
     QFile file(":/Resource/uiData/analysisExtractionModes.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "无法打开 analysisExtractionModes.json";
+
+        emit logMessage("打开 analysisExtractionModes.json 失败");
         return;
     }
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
@@ -349,6 +363,8 @@ void AnalysisPage::loadAnalysisExtractionModesFromJson()
 
     if (!doc.isObject()) {
         qWarning() << "analysisExtractionModes.json 格式不正确";
+
+        emit logMessage("analysisExtractionModes.json 错误");
         return;
     }
 
@@ -450,6 +466,8 @@ QList<MetricInfo2> AnalysisPage::loadTableMetricInfoFromJson()
     QFile file(":/Resource/uiData/tableWidget2Data.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "无法打开 tableWidget2Data.json 文件!";
+
+        emit logMessage("警告，无法打开 tableWidget2Data.json 文件!");
         return metricList;
     }
 
@@ -493,6 +511,8 @@ void AnalysisPage::on_filterData_btn_clicked()
 
     if (startDate > endDate) {
         QMessageBox::warning(this, "日期错误", "开始日期不能晚于结束日期！");
+
+        emit logMessage("日期错误,开始日期不能晚于结束日期！");
         return;
     }
 
@@ -509,6 +529,8 @@ void AnalysisPage::loadDatabaseFiles(const QDate& startDate, const QDate& endDat
 
     if (!dir.exists()) {
         QMessageBox::warning(this, "错误", "文件源目录不存在！\n" + dirPath);
+
+        emit logMessage("错误,文件源目录不存在！");
         return;
     }
 
@@ -549,6 +571,8 @@ void AnalysisPage::loadDatabaseFiles(const QDate& startDate, const QDate& endDat
 
     if (loadedCount == 0) {
         QMessageBox::information(this, "提示", "未找到符合条件的数据库文件。");
+
+        emit logMessage("提示,未找到符合条件的数据库文件。");
     }
 }
 
@@ -569,6 +593,8 @@ void AnalysisPage::on_outputData_btn_clicked()
 
     if (selectedFiles.isEmpty()) {
         QMessageBox::warning(this, "提示", "请先在列表中勾选需要导出的数据库文件！");
+
+        emit logMessage("提示,请先在列表中勾选需要导出的数据库文件！");
         return;
     }
 
@@ -593,6 +619,8 @@ void AnalysisPage::on_outputData_btn_clicked()
 
             if (!db.open()) {
                 qWarning() << "无法打开数据库进行导出:" << dbFilePath;
+
+                emit logMessage("无法打开数据库进行导出:");
                 continue; //跳过这个文件，继续下一个
             }
 
@@ -647,6 +675,8 @@ void AnalysisPage::on_outputData_btn_clicked()
 
     QMessageBox::information(this, "导出完成",
         QString("成功导出 %1 个文件！\n\n保存在目录：\n%2").arg(successCount).arg(exportDir));
+
+    emit logMessage("导出数据库数据成功！");
 }
 
 // =====================================================================
@@ -722,18 +752,24 @@ void AnalysisPage::on_applyDiyTimeBtn_clicked()
 
     if (!ok1 || !ok2) {
         QMessageBox::warning(this, "输入错误", "请输入有效的数字时间！\n例如：10.5");
+
+        emit logMessage("输入错误,请输入有效的数字时间！");
         return;
     }
 
     //逻辑校验：起点必须小于终点
     if (startSecs >= endSecs) {
         QMessageBox::warning(this, "逻辑错误", "起始时间必须严格小于结束时间！");
+
+        emit logMessage("逻辑错误,起始时间必须严格小于结束时间！");
         return;
     }
 
     //负数校验（时间不能为负）
     if (startSecs < 0 || endSecs < 0) {
         QMessageBox::warning(this, "输入错误", "时间不能为负数！");
+
+        emit logMessage("输入错误,时间不能为负数！");
         return;
     }
 
@@ -1125,6 +1161,8 @@ void AnalysisPage::on_outputBtn_clicked()
     if (ui->tableWidget->rowCount() == 0 ||
         (ui->tableWidget->item(0, 1) && ui->tableWidget->item(0, 1)->text() == "--")) {
         QMessageBox::warning(this, "导出失败", "当前表格中没有有效数据，请先点击【生成摘要】！");
+
+        emit logMessage("导出失败,当前表格中没有有效数据");
         return;
     }
 
@@ -1143,6 +1181,8 @@ void AnalysisPage::on_outputBtn_clicked()
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "导出失败", "无法创建文件，请检查目录权限：\n" + fileName);
+
+        emit logMessage("导出失败,无法创建文件，请检查目录权限");
         return;
     }
 
@@ -1182,4 +1222,6 @@ void AnalysisPage::on_outputBtn_clicked()
 
     file.close();
     QMessageBox::information(this, "导出成功", "统计摘要已成功导出至：\n" + fileName);
+
+    emit logMessage(QString("导出成功,统计摘要 %1 已成功导出").arg(fileName));
 }

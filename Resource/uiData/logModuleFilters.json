@@ -1,0 +1,30 @@
+[
+  {
+    "id": "all",
+    "name": "全部模块"
+  },
+  {
+    "id": "log",
+    "name": "系统日志"
+  },
+  {
+    "id": "modbus",
+    "name": "Modbus通信"
+  },
+  {
+    "id": "database",
+    "name": "数据库存储"
+  },
+  {
+    "id": "acquisition",
+    "name": "数据采集"
+  },
+  {
+    "id": "analysis",
+    "name": "数据分析"
+  },
+  {
+    "id": "config",
+    "name": "参数配置"
+  }
+]

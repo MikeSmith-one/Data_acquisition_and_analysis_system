@@ -13,5 +13,6 @@
         <file>Resource/uiData/configTableWidget1.json</file>
         <file>Resource/uiData/configTableWidget3.json</file>
         <file>Resource/uiData/configTableWidget2.json</file>
+        <file>Resource/uiData/logModuleFilters.json</file>
     </qresource>
 </RCC>

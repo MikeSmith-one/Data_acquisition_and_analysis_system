@@ -51,6 +51,8 @@ QString ConfigPage::loadQss()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "打开文件失败!";
+
+        emit logMessage("打开文件失败!");
         return "";
     }
 
@@ -92,6 +94,8 @@ void ConfigPage::on_savePresentConfigBtn_clicked()
 	//防止在采集中修改当前工位配置
     if (m_isAcquisitionRunning) {
         QMessageBox::warning(this, "警告", "正在采集中，无法保存配置！");
+
+        emit logMessage("警告,正在采集中，无法保存配置！");
         return;
     }
 
@@ -108,6 +112,7 @@ void ConfigPage::on_savePresentConfigBtn_clicked()
 
     //弹窗提示
     QMessageBox::information(this, "提示", QString("工位 %1 配置已保存！").arg(index + 1));
+    emit logMessage(QString("工位 %1 配置已保存！").arg(index + 1));
 
     //通知后台，当前工位配置已变
     emit ConfigManager::instance()->configUpdated(ui->stationNum->value());
@@ -119,6 +124,8 @@ void ConfigPage::on_globalSaveBtn_clicked()
 	//防止在采集中修改全局配置
     if (m_isAcquisitionRunning) {
         QMessageBox::warning(this, "警告", "正在采集中，无法保存配置！");
+
+        emit logMessage("警告,正在采集中，无法保存配置！");
         return;
     }
 
@@ -145,6 +152,8 @@ void ConfigPage::on_globalSaveBtn_clicked()
     updateStationCount(newCount);
 
     QMessageBox::information(this, "提示", "全局配置已保存！");
+
+    emit logMessage("全局配置已保存！");
 
     //广播全局信号，采集页面收到后重构界面列数
     emit ConfigManager::instance()->configUpdated(newCount);
@@ -173,6 +182,8 @@ void ConfigPage::on_resumeConfigBtn_clicked()
 
     //完成提示
     QMessageBox::information(this, "提示", QString("工位 %1 已成功恢复为默认配置！").arg(currentIndex + 1));
+
+    emit logMessage(QString("工位 %1 已成功恢复为默认配置！").arg(currentIndex + 1));
 }
 
 //槽函数：选择新的配置文件 (顶栏 ToolButton)
@@ -189,6 +200,8 @@ void ConfigPage::on_toolButton_2_clicked()
         updateStationCount(count);
         loadStationData(0);
     }
+
+    emit logMessage(QString("配置文件%1已加载").arg(fileName));
 }
 
 //选择数据库存储位置
@@ -197,6 +210,8 @@ void ConfigPage::on_toolButton_3_clicked()
     // 防呆：采集中不允许修改配置
     if (m_isAcquisitionRunning) {
         QMessageBox::warning(this, "警告", "正在采集中，无法更改存储位置！");
+
+        emit logMessage("警告,正在采集中，无法更改存储位置！");
         return;
     }
 
@@ -216,6 +231,8 @@ void ConfigPage::on_toolButton_clicked()
     // 防呆：采集中不允许修改配置
     if (m_isAcquisitionRunning) {
         QMessageBox::warning(this, "警告", "正在采集中，无法更改存储位置！");
+
+        emit logMessage("警告,正在采集中，无法更改存储位置！");
         return;
     }
 
@@ -235,6 +252,8 @@ void ConfigPage::initTableWidget(QTableWidget* table, const QString& jsonPath, Q
     QFile file(jsonPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) { 
         qWarning() << "打开文件失败!";
+
+        emit logMessage("打开文件失败!");
         return; }
 
     QJsonObject root = QJsonDocument::fromJson(file.readAll()).object();

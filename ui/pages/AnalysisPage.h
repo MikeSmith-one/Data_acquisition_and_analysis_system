@@ -69,6 +69,9 @@ public:
     AnalysisPage(QWidget* parent = nullptr);
     ~AnalysisPage();
 
+signals:
+    void logMessage(const QString& msg);  //日志信息信号
+
 public slots:
     //接收来自 ConfigPage 的工位数量更新信号，实现动态扩展
     void updateStationCount(int count);

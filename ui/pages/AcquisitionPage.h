@@ -74,8 +74,9 @@ public:
     ~AcquisitionPage();
 
 signals:
-    void startAcquisitionRequested(); // 申请开始采集
-    void stopAcquisitionRequested();  // 申请停止采集
+    void startAcquisitionRequested();     //申请开始采集
+    void stopAcquisitionRequested();      //申请停止采集
+    void logMessage(const QString& msg);  //日志信息信号
 
 public slots:
     //接收来自 ConfigPage 的工位数量更新信号，实现动态扩展

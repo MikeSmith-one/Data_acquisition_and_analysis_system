@@ -99,10 +99,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_modbusManager, &ModbusManager::alarmTriggered,
         this, &MainWindow::onAlarmTriggered);
 
+
+
     //测试用：打印接收到的工位数据到控制台
+#ifdef QT_DEBUG
     connect(m_modbusManager, &ModbusManager::stationDataReceived,
         this, &MainWindow::debugPrintStationData);
-
+#endif
     //启动工作线程
     m_modbusThread->start();
 
@@ -134,6 +137,80 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_acquisitionPage, &AcquisitionPage::stopAcquisitionRequested,
         m_dbManager, &DatabaseManager::stopRecording, Qt::QueuedConnection);
+
+    // ============================================================================
+    // 日志系统
+    // ============================================================================
+    
+    //路由 AcquisitionPage 的日志
+    connect(m_acquisitionPage, &AcquisitionPage::logMessage, this, [=](const QString& msg) {
+        if (m_logPage) {
+            //智能推断级别：包含"失败","异常","超时","报警"等字眼定为 ERROR/WARN
+            QString level = "INFO";
+            if (msg.contains("失败") || msg.contains("异常") || msg.contains("超时") || msg.contains("错误")) level = "ERROR";
+            else if (msg.contains("报警") || msg.contains("重试")) level = "WARN";
+
+            m_logPage->receiveLog(level, "数据采集", msg);
+        }
+        });
+
+    //路由 AnalysisPage 的日志
+    connect(m_analysisPage, &AnalysisPage::logMessage, this, [=](const QString& msg) {
+        if (m_logPage) {
+            //智能推断级别：包含"失败","异常","超时","报警"等字眼定为 ERROR/WARN
+            QString level = "INFO";
+            if (msg.contains("失败") || msg.contains("异常") || msg.contains("超时") || msg.contains("错误")) level = "ERROR";
+            else if (msg.contains("报警") || msg.contains("重试")) level = "WARN";
+
+            m_logPage->receiveLog(level, "数据分析", msg);
+        }
+        });
+
+    //路由 ConfigPage 的日志
+    connect(m_configPage, &ConfigPage::logMessage, this, [=](const QString& msg) {
+        if (m_logPage) {
+            //智能推断级别：包含"失败","异常","超时","报警"等字眼定为 ERROR/WARN
+            QString level = "INFO";
+            if (msg.contains("失败") || msg.contains("异常") || msg.contains("超时") || msg.contains("错误")) level = "ERROR";
+            else if (msg.contains("报警") || msg.contains("重试")) level = "WARN";
+
+            m_logPage->receiveLog(level, "参数配置", msg);
+        }
+        });
+
+    //路由 LogPage 的日志
+    connect(m_logPage, &LogPage::logMessage, this, [=](const QString& msg) {
+        if (m_logPage) {
+            //智能推断级别：包含"失败","异常","超时","报警"等字眼定为 ERROR/WARN
+            QString level = "INFO";
+            if (msg.contains("失败") || msg.contains("异常") || msg.contains("超时") || msg.contains("错误")) level = "ERROR";
+            else if (msg.contains("报警") || msg.contains("重试")) level = "WARN";
+
+            m_logPage->receiveLog(level, "系统日志", msg);
+        }
+        });
+
+    //路由 ModbusManager 的日志
+    connect(m_modbusManager, &ModbusManager::logMessage, this, [=](const QString& msg) {
+        if (m_logPage) {
+            //智能推断级别：包含"失败","异常","超时","报警"等字眼定为 ERROR/WARN
+            QString level = "INFO";
+            if (msg.contains("失败") || msg.contains("异常") || msg.contains("超时")) level = "ERROR";
+            else if (msg.contains("报警") || msg.contains("重试")) level = "WARN";
+
+            m_logPage->receiveLog(level, "Modbus通信", msg);
+        }
+        });
+
+    //路由 DatabaseManager 的日志
+    connect(m_dbManager, &DatabaseManager::logMessage, this, [=](const QString& msg) {
+        if (m_logPage) {
+            QString level = "INFO";
+            if (msg.contains("失败") || msg.contains("错误")) level = "ERROR";
+
+            m_logPage->receiveLog(level, "数据库存储", msg);
+        }
+        });
 
     //启动数据库线程
     m_dbThread->start();

@@ -63,7 +63,7 @@ void StationContext::startAcquisition() {
 
     //防呆提示：如果发现没有配置任何寄存器，打印警告
     if (m_holdingRegCount <= 0 && m_inputRegCount <= 0) {
-        QString warnMsg = QString("工位 %1 启动采集失败：未读取到任何有效的寄存器映射配置！请检查配置文件。").arg(m_config.stationId + 1);
+        QString warnMsg = QString("警告！工位 %1 启动采集失败：未读取到任何有效的寄存器映射配置！请检查配置文件。").arg(m_config.stationId + 1);
         emit logMessage(warnMsg);
         qWarning() << warnMsg;
         return; //直接返回，不发起连接
@@ -127,7 +127,7 @@ void StationContext::onSocketDisconnected() {
 
         //只有在“正在采集”期间发生的意外断线，才触发指数退避重连
         if (m_isAcquiring) {
-            emit logMessage(QString("工位 %1 断开连接，%2 秒后重试...").arg(m_config.stationId + 1).arg(m_currentBackoff / 1000));
+            emit logMessage(QString("异常！工位 %1 断开连接，%2 秒后重试...").arg(m_config.stationId + 1).arg(m_currentBackoff / 1000));
 			qDebug() << "Disconnected from" << m_config.ip << ":" << m_config.port << ", retrying in" << m_currentBackoff / 1000 << "seconds";
             m_reconnectTimer->start(m_currentBackoff);
             m_currentBackoff = qMin(m_currentBackoff * 2, 15000);//最大 15 秒
