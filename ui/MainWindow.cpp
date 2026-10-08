@@ -218,6 +218,28 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    // -------------------------------------
+    // 关闭 Database 线程
+    // -------------------------------------
+    if (m_dbThread && m_dbThread->isRunning()) {
+        //先让 DB Manager 停止记录，强制把内存里的数据落盘，防止丢数据
+        QMetaObject::invokeMethod(m_dbManager, "stopRecording", Qt::BlockingQueuedConnection);
+
+        m_dbThread->quit(); //通知线程退出事件循环
+        m_dbThread->wait(); //阻塞主线程，等子线程完全结束
+    }
+
+    // ----------------------------------
+    // 关闭 Modbus 线程
+    // ----------------------------------
+    if (m_modbusThread && m_modbusThread->isRunning()) {
+        //让 Modbus Manager 断开所有 TCP 连接
+        QMetaObject::invokeMethod(m_modbusManager, "stopAcquisition", Qt::BlockingQueuedConnection);
+
+        m_modbusThread->quit();
+        m_modbusThread->wait();
+    }
+
     delete ui;
 }
 
