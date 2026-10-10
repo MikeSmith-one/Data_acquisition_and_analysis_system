@@ -709,6 +709,9 @@ void AnalysisPage::initChartPool()
         slot.chart->setMargins(QMargins(10, 10, 10, 10));
         slot.chart->setTitle(slot.title);
 
+        //开启鼠标左键框选放大功能
+        slot.view->setRubberBand(QChartView::RectangleRubberBand);
+
         //初始化 Y 轴 (所有图表都有数值 Y 轴)
         slot.axisY = new QValueAxis();
         slot.axisY->setLabelFormat("%.2f");
