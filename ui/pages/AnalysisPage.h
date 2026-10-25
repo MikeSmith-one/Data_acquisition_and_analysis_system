@@ -87,10 +87,10 @@ private slots:
     void onAnalysisExtractionModeChanged(int index);
 
     //左侧面板相关槽函数
-    void on_loadingBtn_clicked();                        // 加载数据文件
-    void on_filterData_btn_clicked();                    // 筛选数据
-    void on_outputData_btn_clicked();                    // 导出数据
-    void on_timeModelBox_currentIndexChanged(int index); // 分析周期下拉框联动
+    void on_loadingBtn_clicked();                        //加载数据文件
+    void on_filterData_btn_clicked();                    //筛选数据
+    void on_outputData_btn_clicked();                    //导出数据
+    void on_timeModelBox_currentIndexChanged(int index); //分析周期下拉框联动
 
     //ListView 勾选状态变化时的槽函数
     void onListViewItemChanged(QStandardItem* item);
