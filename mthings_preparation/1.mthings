@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<MThings>
+	<PORT_LIST>
+		<NET cip="--" Name="NET001" Remarks="" DesIP="127.0.0.1" SrcPortID="0" LocalPortID="502" LocalIP="127.0.0.1" SessionKey="--" prxy="0" DesPortID="502" LinkMode="1" LinkResetTime="0" LinkHoldTime="6000" mintv="5" TransMode="8" DeviceType="2">
+			<ProtocolPara CharType="0" MaxAsynNum="15" />
+		</NET>
+		<NET cip="--" Name="NET002" Remarks="" DesIP="127.0.0.1" SrcPortID="0" LocalPortID="502" LocalIP="169.254.210.79" SessionKey="--" prxy="0" DesPortID="502" LinkMode="1" LinkResetTime="0" LinkHoldTime="6000" mintv="5" TransMode="8" DeviceType="2">
+			<ProtocolPara CharType="0" MaxAsynNum="15" />
+		</NET>
+		<NET cip="--" Name="NET003" Remarks="" DesIP="127.0.0.1" SrcPortID="0" LocalPortID="502" LocalIP="169.254.178.51" SessionKey="--" prxy="0" DesPortID="502" LinkMode="1" LinkResetTime="0" LinkHoldTime="6000" mintv="5" TransMode="8" DeviceType="2">
+			<ProtocolPara CharType="0" MaxAsynNum="15" />
+		</NET>
+	</PORT_LIST>
+	<MQTT />
+	<CURVE />
+	<HISDATA />
+	<ALARM_LIST>
+		<TYPELIST />
+	</ALARM_LIST>
+	<SYS_DATA>
+		<PAGE ID="1" Name="HOME" width="1920" hight="1080" BackColor="#FFFFFFFF" PicPath="" />
+	</SYS_DATA>
+	<LOGIC_LIST ActiveID="0" ActiveIDs="">
+		<LOGIC ID="1" Name="Logic1" Encoding="qbs">AAAAHXjaq1ZKzs/LS00uyczPK1ayio7VUcrLT0kFM2sBntMKTQ==</LOGIC>
+	</LOGIC_LIST>
+	<DEVICE_LIST>
+		<DEVICE ID="1" Name="[S]NET001-001" DeviceType="2" BindMode="0" BindDeviceID="0" p_invl="0" btime="0" BathReadMode="0" Addr="1" mr_reg="125" mr_bit="2000" AddrUIMode="0" CRCByteOder="1" BlockBitOder="0" AddrOffset="0" PackWay="1" BitGap="0" RegGap="5" OneReg10="0" OneCoil0F="0" BCast1="0" BCast2="0" IsBCDevice="0" cGp="">
+			<PORTS>
+				<port Name="NET001" />
+			</PORTS>
+			<GROUPS />
+			<SELF_LIST />
+			<DATA_LIST>
+				<DATA ID="1" Name="Tin" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="100" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="20" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="20" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="2" Name="Tout" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="102" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="30" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="50" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="3" Name="Tavg" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="104" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="45" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="35" MinRadom="15" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="4" Name="Tmax" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="106" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="50" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="25" MinRadom="20" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="5" Name="ΔT" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="108" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="35" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="50" MinRadom="30" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="6" Name="Rth" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="110" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="0" Coef_a="14" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="20" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="7" Name="flow" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="112" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="15" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="5" MinRadom="5" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+			</DATA_LIST>
+		</DEVICE>
+		<DEVICE ID="2" Name="[S]NET002-002" DeviceType="2" BindMode="0" BindDeviceID="0" p_invl="0" btime="0" BathReadMode="0" Addr="2" mr_reg="125" mr_bit="2000" AddrUIMode="0" CRCByteOder="1" BlockBitOder="0" AddrOffset="0" PackWay="1" BitGap="0" RegGap="5" OneReg10="0" OneCoil0F="0" BCast1="0" BCast2="0" IsBCDevice="0" cGp="">
+			<PORTS>
+				<port Name="NET002" />
+			</PORTS>
+			<GROUPS />
+			<SELF_LIST />
+			<DATA_LIST>
+				<DATA ID="1" Name="Tin" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="100" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="20" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="20" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="2" Name="Tout" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="102" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="30" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="50" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="3" Name="Tavg" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="104" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="45" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="35" MinRadom="15" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="4" Name="Tmax" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="106" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="50" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="25" MinRadom="20" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="5" Name="ΔT" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="108" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="35" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="50" MinRadom="30" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="6" Name="Rth" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="110" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="0" Coef_a="14" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="20" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="7" Name="flow" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="112" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="15" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="5" MinRadom="5" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+			</DATA_LIST>
+		</DEVICE>
+		<DEVICE ID="3" Name="[S]NET003-003" DeviceType="2" BindMode="0" BindDeviceID="0" p_invl="0" btime="0" BathReadMode="0" Addr="3" mr_reg="125" mr_bit="2000" AddrUIMode="0" CRCByteOder="1" BlockBitOder="0" AddrOffset="0" PackWay="1" BitGap="0" RegGap="5" OneReg10="0" OneCoil0F="0" BCast1="0" BCast2="0" IsBCDevice="0" cGp="">
+			<PORTS>
+				<port Name="NET003" />
+			</PORTS>
+			<GROUPS />
+			<SELF_LIST />
+			<DATA_LIST>
+				<DATA ID="1" Name="Tin" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="100" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="20" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="20" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="2" Name="Tout" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="102" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="30" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="50" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="3" Name="Tavg" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="104" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="45" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="35" MinRadom="15" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="4" Name="Tmax" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="106" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="50" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="25" MinRadom="20" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="5" Name="ΔT" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="108" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="35" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="50" MinRadom="30" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="6" Name="Rth" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="110" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="1" Coef_a="14" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="20" MinRadom="10" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+				<DATA ID="7" Name="flow" PrtcTYPE="2" PointNum="1" Unit="--" ShowType="0" Gain="1" Offset="0" sz="4" BitOffset="0" BitNum="32" BLOCK="3" Addr="112" Range="--" CmdValue="--" Color="" ByteOder="0" WordOder="0" IntervalTime="0" IsBRead="1">
+					<TIMEOUT Time="2000" ResendCount="0" />
+					<VALUE Stategy="1" TimeBngrWay="0" Coef_a="15" Coef_b="0" Coef_c="1.0" Coef_d="0" Coef_e="0" ResetStep="0" XInvl="1000" MaxRadom="5" MinRadom="5" MaxValue="0" MinValue="0" datarry="--" BindDeviceID="0" BindDataID="0" />
+					<ENUMS />
+					<GROUPS />
+				</DATA>
+			</DATA_LIST>
+		</DEVICE>
+	</DEVICE_LIST>
+</MThings>
