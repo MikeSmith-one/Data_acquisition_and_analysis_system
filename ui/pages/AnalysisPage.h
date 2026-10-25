@@ -66,7 +66,7 @@ class AnalysisPage : public QWidget
     Q_OBJECT
 
 public:
-    AnalysisPage(QWidget* parent = nullptr);
+    explicit AnalysisPage(QWidget* parent = nullptr);
     ~AnalysisPage();
 
 signals:
