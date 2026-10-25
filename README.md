@@ -42,6 +42,12 @@
 *   **防抖报警锁存**：底层精准比对阈值，触发非模态合并弹窗，避免“报警风暴”。
 *   **按天轮转日志 (Daily Rolling)**：系统生命体征开机即录，按天生成 `.log` 文件，支持内存级的高速多条件关键字检索。
 
+## 🛠️ 编译与运行 (Build & Run)
+操作系统：Windows 10 / 11
+开发环境：Qt Creator / Visual Studio 2022
+构建工具：CMake (>= 3.16)
+依赖库：Qt 6 (Core, Gui, Widgets, Network, Sql, Charts)
+
 ## 🏗️ 系统架构图 (Architecture)
 
 系统采用星型路由与高度解耦的数据流转机制：
@@ -61,9 +67,3 @@
        │                               ├──► [AnalysisPage]    (短连接查库 / 聚合计算)
        ▼                               ├──► [ConfigPage]      (JSON驱动 / INI持久化)
 [SQLite 数据库文件]                    └──► [LogPage]         (追加写入 / 内存检索)
-
-## 🛠️ 编译与运行 (Build & Run)
-操作系统：Windows 10 / 11
-开发环境：Qt Creator / Visual Studio 2022
-构建工具：CMake (>= 3.16)
-依赖库：Qt 6 (Core, Gui, Widgets, Network, Sql, Charts)
